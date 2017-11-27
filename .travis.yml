@@ -24,3 +24,4 @@ deploy:
   provider: heroku
   api_key:
     secure: 3dcc61c7-a9ca-4efe-aeb7-8d202a305f55
+  run: "php artisan key:generate"
