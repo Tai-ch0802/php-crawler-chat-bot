@@ -7,7 +7,6 @@ env:
 before_script:
 - composer install
 - cp .env.example .env
-- php artisan key:generate
 install:
 - composer install
 script:
@@ -18,6 +17,5 @@ deploy:
   api_key:
     secure: BmVq8mrg6fWVz7r9QcAwGNX7fNZ13z4B9VUHfxGSyTvgJGj40FKD0RODpXclqa5/U0Ec9LOLGDkxNjQJsNZHxtAM3Vnjq597jc3Sq3xb7W0xLD1gPgSs7zliz0d/07CTkExs7UiFca4grbpejD0MsXr9OJSxz9Mh42jYTmHZ3SomRFsoEY3S69Ac3ZQXH2bMWyvJYU5/xzZbO2KBvjOmdrJ+LE8q9CoMBId99Df5fNvRBOutLBM1/NVjGZ8YkYW2B5o0sJsoENWAL5ywCSFjlLddHXRhuJ9s/ZP6XLve+QyKI7Y9j9MvmM2cfVVNlw1omqVzpqVgI+gJiVI0E+Q6tYU9OfYEZVTb3hjThiEEAA783brV/3Ula4Dpk7YWK3F5BAB1gkq11KH/TqOCg+4JdbSS1ITpzVgZH1NlNK/6PI/062l+zhN3vPNN4p0/FCBUYmAElcJJI64xHd7KEOQ16wuVLazsZahcIt7c6Ixo5MwMuexquR7uaO39wFNIr6jMGKaMVjUTYz9G0UezGGKQdwZbA90QKmGOyyrEADYBXgU2Vm4uMNk6wS5+p848MjdxMtu6gllMYIkPbIHCoG8r0KCuLWkCnxSIVdndtuP0EaokJNuYzSbbLld/fiL3YV575f3dV4UlU7NmTIAOEv6ze2wHj392rQs8Az9CAGR1rwo=
   app: php-crawler-chat-bot
-  run: "php artisan key:generate"
   on:
     repo: Tai-ch0802/php-crawler-chat-bot
