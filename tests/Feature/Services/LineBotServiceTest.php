@@ -30,7 +30,7 @@ class LineBotServiceTest extends TestCase
     public function testPushMessageWithObject()
     {
         $target = $this->lineBotService->getImageCarouselColumnTemplateBuilder(
-            'https://www.cleverfiles.com/howto/wp-content/uploads/2016/08/mini.jpg',
+            'https://i.imgur.com/BlBH2HE.jpg',
             'https://github.com/Tai-ch0802/php-crawler-chat-bot',
             '自己玩的linebot'
         );
