@@ -15,10 +15,34 @@ class LineBotService
         $this->lineBot = app(LINEBot::class);
     }
 
-    public function pushMessage(string $string)
+    /**
+     * @param LINEBot\MessageBuilder\TemplateMessageBuilder|string $content
+     * @return LINEBot\Response
+     */
+    public function pushMessage($content)
     {
-        $messageBuilder = new LINEBot\MessageBuilder\TextMessageBuilder($string);
+        if(is_string($content)) {
+            $content = new LINEBot\MessageBuilder\TextMessageBuilder($content);
+        }
+        return $this->lineBot->pushMessage($this->lineUserId, $content);
+    }
 
-        return $this->lineBot->pushMessage($this->lineUserId, $messageBuilder);
+    /**
+     * @param $imagePath
+     * @param $directUri
+     * @param $label
+     * @return LINEBot\MessageBuilder\TemplateMessageBuilder
+     */
+    public function getImageCarouselColumnTemplateBuilder($imagePath, $directUri, $label)
+    {
+        $target = new LINEBot\TemplateActionBuilder\UriTemplateActionBuilder($label, $directUri);
+        $target->buildTemplateAction();
+
+        $target =  new LINEBot\MessageBuilder\TemplateBuilder\ImageCarouselColumnTemplateBuilder($imagePath, $target);
+
+        $target = new LINEBot\MessageBuilder\TemplateBuilder\ImageCarouselTemplateBuilder([$target]);
+//        dd($target->buildTemplate());
+
+        return new LINEBot\MessageBuilder\TemplateMessageBuilder('test123', $target);
     }
 }

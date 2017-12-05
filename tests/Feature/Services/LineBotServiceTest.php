@@ -26,4 +26,16 @@ class LineBotServiceTest extends TestCase
 
         $this->assertEquals(200, $response->getHTTPStatus());
     }
+
+    public function testPushMessageWithObject()
+    {
+        $target = $this->lineBotService->getImageCarouselColumnTemplateBuilder(
+            'https://www.cleverfiles.com/howto/wp-content/uploads/2016/08/mini.jpg',
+            'https://github.com/Tai-ch0802/php-crawler-chat-bot',
+            '自己玩的linebot'
+        );
+        $response = $this->lineBotService->pushMessage($target);
+
+        $this->assertEquals(200, $response->getHTTPStatus());
+    }
 }
