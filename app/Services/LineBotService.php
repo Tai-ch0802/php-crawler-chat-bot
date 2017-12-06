@@ -2,6 +2,12 @@
 namespace App\Services;
 
 use LINE\LINEBot;
+use LINE\LINEBot\Response;
+use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
+use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
+use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\ImageCarouselColumnTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\ImageCarouselTemplateBuilder;
 
 class LineBotService
 {
@@ -15,34 +21,87 @@ class LineBotService
         $this->lineBot = app(LINEBot::class);
     }
 
-    /**
-     * @param LINEBot\MessageBuilder\TemplateMessageBuilder|string $content
-     * @return LINEBot\Response
-     */
-    public function pushMessage($content)
+    public function fake()
     {
-        if(is_string($content)) {
-            $content = new LINEBot\MessageBuilder\TextMessageBuilder($content);
+    }
+
+    /**
+     * @param TemplateMessageBuilder|string $content
+     * @return Response
+     */
+    public function pushMessage($content): Response
+    {
+        if (is_string($content)) {
+            $content = new TextMessageBuilder($content);
         }
         return $this->lineBot->pushMessage($this->lineUserId, $content);
     }
 
     /**
-     * @param $imagePath
-     * @param $directUri
-     * @param $label
-     * @return LINEBot\MessageBuilder\TemplateMessageBuilder
+     * @deprecated
+     * @param string $imagePath
+     * @param string $directUri
+     * @param string $label
+     * @return TemplateMessageBuilder
      */
-    public function getImageCarouselColumnTemplateBuilder($imagePath, $directUri, $label)
+    public function buildTemplateMessageBuilderDeprecated(
+        string $imagePath,
+        string $directUri,
+        string $label
+    ): TemplateMessageBuilder {
+        $aa = new UriTemplateActionBuilder($label, $directUri);
+        $bb =  new ImageCarouselColumnTemplateBuilder($imagePath, $aa);
+        $target = new ImageCarouselTemplateBuilder([$bb, $bb, $bb, $bb, $bb, $bb, $bb, $bb]);
+
+        return new TemplateMessageBuilder('test123', $target);
+    }
+
+
+    /**
+     * @param array $data
+     *              [
+     *                  [
+     *                      'imagePath' => string,
+     *                      'directUri' => string,
+     *                      'label' => string,
+     *                  ],
+     *              ]
+     * @param string $notificationText
+     * @return array Array of TemplateMessageBuilder
+     */
+    public function buildTemplateMessageBuilder(array $data, string $notificationText = '新通知來囉!'): array
     {
-        $target = new LINEBot\TemplateActionBuilder\UriTemplateActionBuilder($label, $directUri);
-        $target->buildTemplateAction();
+        $imageCarouselColumnTemplateBuilders = array_map(function ($d) {
+            return $this->buildImageCarouselColumnTemplateBuilder(
+                $d['imagePath'],
+                $d['directUri'],
+                $d['label']
+            );
+        }, $data);
 
-        $target =  new LINEBot\MessageBuilder\TemplateBuilder\ImageCarouselColumnTemplateBuilder($imagePath, $target);
+        $tempChunk = array_chunk($imageCarouselColumnTemplateBuilders, 5);
+        return array_map(function ($data) use ($notificationText) {
+            return new TemplateMessageBuilder(
+                $notificationText,
+                new ImageCarouselTemplateBuilder($data)
+            );
+        }, $tempChunk);
+    }
 
-        $target = new LINEBot\MessageBuilder\TemplateBuilder\ImageCarouselTemplateBuilder([$target]);
-//        dd($target->buildTemplate());
-
-        return new LINEBot\MessageBuilder\TemplateMessageBuilder('test123', $target);
+    /**
+     * @param string $imagePath
+     * @param string $directUri
+     * @param string $label
+     * @return ImageCarouselColumnTemplateBuilder
+     */
+    protected function buildImageCarouselColumnTemplateBuilder(
+        string $imagePath,
+        string $directUri,
+        string $label
+    ): ImageCarouselColumnTemplateBuilder {
+        return new ImageCarouselColumnTemplateBuilder(
+            $imagePath,
+            new UriTemplateActionBuilder($label, $directUri)
+        );
     }
 }
