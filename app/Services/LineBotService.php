@@ -2,6 +2,12 @@
 namespace App\Services;
 
 use LINE\LINEBot;
+use LINE\LINEBot\Response;
+use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
+use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
+use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\ImageCarouselColumnTemplateBuilder;
+use LINE\LINEBot\MessageBuilder\TemplateBuilder\ImageCarouselTemplateBuilder;
 
 class LineBotService
 {
@@ -15,34 +21,37 @@ class LineBotService
         $this->lineBot = app(LINEBot::class);
     }
 
-    /**
-     * @param LINEBot\MessageBuilder\TemplateMessageBuilder|string $content
-     * @return LINEBot\Response
-     */
-    public function pushMessage($content)
+    public function fake()
     {
-        if(is_string($content)) {
-            $content = new LINEBot\MessageBuilder\TextMessageBuilder($content);
+    }
+
+    /**
+     * @param TemplateMessageBuilder|string $content
+     * @return Response
+     */
+    public function pushMessage($content): Response
+    {
+        if (is_string($content)) {
+            $content = new TextMessageBuilder($content);
         }
         return $this->lineBot->pushMessage($this->lineUserId, $content);
     }
 
     /**
-     * @param $imagePath
-     * @param $directUri
-     * @param $label
-     * @return LINEBot\MessageBuilder\TemplateMessageBuilder
+     * @param string $imagePath
+     * @param string $directUri
+     * @param string $label
+     * @return TemplateMessageBuilder
      */
-    public function getImageCarouselColumnTemplateBuilder($imagePath, $directUri, $label)
-    {
-        $target = new LINEBot\TemplateActionBuilder\UriTemplateActionBuilder($label, $directUri);
-        $target->buildTemplateAction();
+    public function getImageCarouselColumnTemplateBuilder(
+        string $imagePath,
+        string $directUri,
+        string $label
+    ): TemplateMessageBuilder {
+        $target = new UriTemplateActionBuilder($label, $directUri);
+        $target =  new ImageCarouselColumnTemplateBuilder($imagePath, $target);
+        $target = new ImageCarouselTemplateBuilder([$target]);
 
-        $target =  new LINEBot\MessageBuilder\TemplateBuilder\ImageCarouselColumnTemplateBuilder($imagePath, $target);
-
-        $target = new LINEBot\MessageBuilder\TemplateBuilder\ImageCarouselTemplateBuilder([$target]);
-//        dd($target->buildTemplate());
-
-        return new LINEBot\MessageBuilder\TemplateMessageBuilder('test123', $target);
+        return new TemplateMessageBuilder('test123', $target);
     }
 }
