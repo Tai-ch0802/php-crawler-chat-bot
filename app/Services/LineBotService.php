@@ -8,6 +8,7 @@ use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\TemplateActionBuilder\UriTemplateActionBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ImageCarouselColumnTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ImageCarouselTemplateBuilder;
+use LINE\LINEBot\MessageBuilder;
 
 class LineBotService
 {
@@ -26,7 +27,7 @@ class LineBotService
     }
 
     /**
-     * @param TemplateMessageBuilder|string $content
+     * @param MessageBuilder|string $content
      * @return Response
      */
     public function pushMessage($content): Response
