@@ -36,11 +36,13 @@ class CrawlerService
     {
         $target = $crawler->filterXPath('//div[contains(@class, "newanime")]')
             ->each(function (Crawler $node) {
+                $date = $this->getDateForNewAnimationFromBaHa($node);
                 $link = $this->getLinkForNewAnimationFromBaHa($node);
                 $image = $this->getImageForNewAnimationFromBaHa($node);
                 $info = $this->getInfoForNewAnimationFromBaHa($node);
 
                 $response = [
+                    'date' => array_first($date),
                     'directUri' => array_first($link),
                     'imagePath' => array_first($image),
                     'label' => array_first($info),
@@ -53,15 +55,24 @@ class CrawlerService
         return $target;
     }
 
+    private function getDateForNewAnimationFromBaHa(Crawler $node)
+    {
+        return $node->filterXPath('//span[contains(@class, "newanime-date")]')
+            ->each(function (Crawler $node) {
+                return $node->text();
+            });
+    }
+
     private function getLinkForNewAnimationFromBaHa(Crawler $node)
     {
         return $node->filterXPath('//a[contains(@class, "newanime__content")]')
-            ->evaluate('substring-after(@href, "")');
+            ->evaluate('string(@href)');
     }
 
     private function getImageForNewAnimationFromBaHa(Crawler $node)
     {
-        return $node->evaluate('substring-after(//img/@data-src, "")');
+        return $node->filterXPath('//img[contains(@class, "lazyload")]')
+            ->evaluate('string(@data-src)');
     }
 
     private function getInfoForNewAnimationFromBaHa(Crawler $node)

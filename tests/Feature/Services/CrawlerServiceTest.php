@@ -33,6 +33,7 @@ class CrawlerServiceTest extends TestCase
         $crawler = $this->crawlerService->getOriginalData('https://ani.gamer.com.tw/');
         $target = $this->crawlerService->getNewAnimationFromBaHa($crawler);
 
+        $this->assertArrayHasKey('date', $target[0]);
         $this->assertArrayHasKey('directUri', $target[0]);
         $this->assertArrayHasKey('imagePath', $target[0]);
         $this->assertArrayHasKey('label', $target[0]);
