@@ -35,4 +35,8 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'url' => [
+        'baHa' => env('BA_HA_URL', 'https://ani.gamer.com.tw/'),
+    ],
+
 ];
