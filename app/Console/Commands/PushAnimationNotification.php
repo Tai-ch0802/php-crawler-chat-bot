@@ -56,9 +56,8 @@ class PushAnimationNotification extends Command
 
         $today = today()->format('m/d');
         $existedList = [];
-        $list = array_map(function ($d) use ($today, &$existedList){
-            if (
-                false === strpos($d['date'], $today) ||
+        $list = array_map(function ($d) use ($today, &$existedList) {
+            if (false === strpos($d['date'], $today) ||
                 in_array($d['label'], $existedList, true)
             ) {
                 return null;
