@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Services\CrawlerService;
 use App\Services\LineBotService;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class PushAnimationNotification extends Command
@@ -62,8 +63,11 @@ class PushAnimationNotification extends Command
             ) {
                 return null;
             }
-            $existedList[] = $d['label'];
+            if (!$this->isCorrectTime($d['directUri'])) {
+                return null;
+            }
 
+            $existedList[] = $d['label'];
             if (mb_strlen($d['label'], 'UTF-8') > 12) {
                 $d['label'] = mb_substr($d['label'], 0, 9, 'UTF-8') . '...';
             }
@@ -73,6 +77,9 @@ class PushAnimationNotification extends Command
         $target = array_filter($list, function ($d) {
             return null !== $d;
         });
+        if (empty($target)) {
+            return;
+        }
 
         $message = "{$today} 最新動畫來囉！";
         $messageBuilders = $this->lineBotService->buildTemplateMessageBuilder($target, $message);
@@ -82,5 +89,25 @@ class PushAnimationNotification extends Command
         }
 
         echo "Good luck!\n";
+    }
+
+    private function isCorrectTime($path): bool
+    {
+        $crawler = $this->crawlerService->getOriginalData($path);
+        $data = $crawler->evaluate('substring-after(//div[@class="anime_name"]/p, "：")');
+
+        $time = array_first($data);
+        $time = htmlentities($time);
+        $time = str_replace('&nbsp;', '', $time);
+
+        $targetTime = Carbon::createFromFormat('Y-m-d H:i:s', trim($time))->timestamp;
+
+        $tenMinutesAgo = Carbon::now()->subMinutes(11)->timestamp;
+
+
+        if ($targetTime > $tenMinutesAgo) {
+            return true;
+        }
+        return false;
     }
 }
