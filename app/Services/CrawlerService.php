@@ -69,7 +69,8 @@ class CrawlerService
         $target = preg_replace("/on([a-z]+)\s*=/si", "On\\1=", $target);
         $target = preg_replace("/&#/si", "&＃", $target);
 
-        $pat = "/<(\/?)(script|i?frame|style|html|body|li|i|map|title|img|link|span|u|font|table|tr|b|marquee|td|strong|div|a|meta|\?|\%)([^>]*?)>/isU";
+        $pat = "/<(\/?)(script|i?frame|style|html|body|li|i|map|title|img|".
+            "link|span|u|font|table|tr|b|marquee|td|strong|div|a|meta|\?|\%)([^>]*?)>/isU";
         $target = preg_replace($pat, "", $target);
 
         return trim($target);
