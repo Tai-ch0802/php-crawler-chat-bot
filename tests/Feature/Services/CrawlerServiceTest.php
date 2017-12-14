@@ -38,4 +38,17 @@ class CrawlerServiceTest extends TestCase
         $this->assertArrayHasKey('imagePath', $target[0]);
         $this->assertArrayHasKey('label', $target[0]);
     }
+
+    public function testGetNewEpisodeFromComic99770()
+    {
+        $path = 'http://99770.hhxxee.com/comic/170/';
+
+        $crawler = $this->crawlerService->getOriginalData($path);
+        $target = $this->crawlerService->getNewEpisodeFromComic99770($crawler);
+
+        $this->assertArrayHasKey('date', $target);
+        $this->assertArrayHasKey('directUri', $target);
+        $this->assertArrayHasKey('imagePath', $target);
+        $this->assertArrayHasKey('label', $target);
+    }
 }
