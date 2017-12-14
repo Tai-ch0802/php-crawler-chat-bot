@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\PushAnimationNotification;
+use App\Console\Commands\PushComicNotification;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,6 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         PushAnimationNotification::class,
+        PushComicNotification::class,
     ];
 
     /**
@@ -25,7 +27,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $this->setScheduleCommandPerMinutes($schedule, PushAnimationNotification::class, 15);
     }
 
     /**
@@ -38,17 +39,5 @@ class Kernel extends ConsoleKernel
         $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
-    }
-
-    /**
-     * @param Schedule $schedule
-     * @param string $command
-     * @param int $minutes
-     */
-    private function setScheduleCommandPerMinutes(Schedule $schedule, string $command, int $minutes)
-    {
-        $schedule->command($command)->cron('*/'.$minutes.' * * * * *')
-            ->timezone('Asia/Taipei')
-            ->withoutOverlapping();
     }
 }
