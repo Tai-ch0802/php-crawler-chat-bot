@@ -1,7 +1,9 @@
 <?php
 namespace Tests\Feature\Services;
 
+use App\Services\CrawlerService;
 use App\Services\SlackService;
+use Carbon\Carbon;
 use Tests\TestCase;
 
 class SlackServiceTest extends TestCase
@@ -22,6 +24,7 @@ class SlackServiceTest extends TestCase
 
     public function testSetClient()
     {
+        $this->markTestSkipped('OK!');
         $webhook = env('SLACK_WEBHOOK_URL');
         $this->slackService->setClient($webhook, '#test', 'TestFromLaravel');
 
@@ -32,11 +35,13 @@ class SlackServiceTest extends TestCase
 
     public function testSendMessage()
     {
+        $this->markTestSkipped('OK!');
         $this->slackService->sendMessage('test message.');
     }
 
     public function testSendMessageWithSpecificChannelAndUserName()
     {
+        $this->markTestSkipped('OK!');
         $this->slackService->sendMessage(
             'test message.',
             [],
@@ -48,21 +53,28 @@ class SlackServiceTest extends TestCase
     public function testSendMessageWithMarkdown()
     {
         $attach = [
-            "title" => "Title",
-            "pretext" => "Pretext _supports_ mrkdwn",
-            "text" => "Testing *right now!*",
-            "mrkdwn_in" =>  [
-                "text",
-                "pretext"
+            [
+                'author_name' => 'Test',
+                'author_link' =>  'https://www.youtube.com/',
+                'author_icon' =>  ':chicken01:',
+                'title' => self::class,
+                'title_link' => 'https://tai-service.slack.com/home',
+                'text' => "`Testing`  ```This\nshit ``` \n ",
+                'mrkdwn_in' =>  [
+                    'text',
+                ],
+                'image_url' => 'http://img.94201314.net/comicui/170.jpg',
+                'footer' => CrawlerService::class,
+                'footer_icon' => ':chicken01:',
+                'ts' => Carbon::now()->timestamp,
             ]
         ];
 
         $this->slackService->sendMessage(
-            "test message.\n `hihi` [test](https://tai-service.slack.com/home)",
+            '',
             $attach,
             '#test',
             '小雞'
         );
     }
-
 }
