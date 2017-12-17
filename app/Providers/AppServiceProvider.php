@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Services\LineBotService;
+use App\Services\SlackService;
 use Illuminate\Support\ServiceProvider;
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
+use Maknz\Slack\Client as SlackClient;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->lineBotRegister();
         $this->lineBotServiceRegister();
+        $this->slackServiceRegister();
     }
 
     private function lineBotRegister()
@@ -42,6 +45,18 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(LineBotService::class, function () {
             return new LineBotService(env('LINE_USER_ID'));
+        });
+    }
+
+    private function slackServiceRegister()
+    {
+        $this->app->singleton(SlackService::class, function () {
+            $setting = [
+                'channel' => config('services.slack.channel'),
+                'username' => config('services.slack.username'),
+            ];
+            $client =  new SlackClient(env('SLACK_WEBHOOK_URL'), $setting);
+            return new SlackService($client);
         });
     }
 }
