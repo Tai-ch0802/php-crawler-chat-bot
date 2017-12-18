@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Services\CrawlerService;
 use App\Services\LineBotService;
+use App\Services\SlackService;
+use App\Transformers\Slack\PushAnimationTransformer;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -32,17 +34,25 @@ class PushAnimationNotification extends Command
     /** @var LineBotService  */
     private $lineBotService;
 
+    /** @var SlackService  */
+    private $slackService;
+
     /**
      * PushAnimationNotification constructor.
      * @param CrawlerService $crawlerService
      * @param LineBotService $lineBotService
+     * @param SlackService $slackService
      */
-    public function __construct(CrawlerService $crawlerService, LineBotService $lineBotService)
-    {
+    public function __construct(
+        CrawlerService $crawlerService,
+        LineBotService $lineBotService,
+        SlackService $slackService
+    ) {
         parent::__construct();
         $this->path = config('services.url.baHa');
         $this->crawlerService = $crawlerService;
         $this->lineBotService = $lineBotService;
+        $this->slackService = $slackService;
     }
 
     /**
@@ -68,27 +78,47 @@ class PushAnimationNotification extends Command
             }
 
             $existedList[] = $d['label'];
-            if (mb_strlen($d['label'], 'UTF-8') > 12) {
-                $d['label'] = mb_substr($d['label'], 0, 9, 'UTF-8') . '...';
-            }
             return $d;
         }, $list);
 
-        $target = array_filter($list, function ($d) {
+        $targets = array_filter($list, function ($d) {
             return null !== $d;
         });
-        if (empty($target)) {
+        if (empty($targets)) {
             return;
         }
 
         $message = "{$today} 最新動畫來囉！";
-        $messageBuilders = $this->lineBotService->buildTemplateMessageBuilder($target, $message);
 
-        foreach ($messageBuilders as $target) {
-            $this->lineBotService->pushMessage($target);
+        $messageBuilders = $this->getLineBotMessageBuilders($targets, $message);
+
+        foreach ($messageBuilders as $messageBuilder) {
+            $this->lineBotService->pushMessage($messageBuilder);
         }
 
+        $targets = array_map(function ($target) {
+            return transform(PushAnimationTransformer::class, $target);
+        }, $targets);
+        $this->slackService->sendMessage($message, $targets, '#animation', '動漫外送員');
+
         echo "Good luck!\n";
+    }
+
+    /**
+     * @param array $target
+     * @param string $message
+     * @return array
+     */
+    private function getLineBotMessageBuilders(array $target, string $message): array
+    {
+        $content = array_map(function ($data) {
+            if (mb_strlen($data['label'], 'UTF-8') > 12) {
+                $data['label'] = mb_substr($data['label'], 0, 9, 'UTF-8') . '...';
+            }
+            return $data;
+        }, $target);
+
+        return $this->lineBotService->buildTemplateMessageBuilder($content, $message);
     }
 
     private function isCorrectTime($path): bool

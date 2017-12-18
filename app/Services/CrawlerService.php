@@ -107,20 +107,48 @@ class CrawlerService
                 $date = $this->getDateForNewAnimationFromBaHa($node);
                 $link = $this->getLinkForNewAnimationFromBaHa($node);
                 $image = $this->getImageForNewAnimationFromBaHa($node);
-                $info = $this->getInfoForNewAnimationFromBaHa($node);
 
                 $response = [
                     'date' => array_first($date),
                     'directUri' => array_first($link),
                     'imagePath' => array_first($image),
-                    'label' => array_first($info),
                 ];
+
+                if (null !== $response['directUri']) {
+                    $crawler = $this->getOriginalData($response['directUri']);
+                    $response = array_merge($response, $this->getAuthorInformationFromBaHa($crawler));
+                    $response['label'] = $this->getTitleForNewAnimationFromBaHa($crawler);
+                    $response['text'] = $this->getTextForNewAnimationFromBaHa($crawler);
+                }
+
                 return in_array(null, array_values($response), true) ? null : $response;
             });
         $target = array_filter($target, function ($d) {
             return null !== $d;
         });
         return $target;
+    }
+
+    private function getTextForNewAnimationFromBaHa(Crawler $node)
+    {
+        return $node->filterXPath('//div[@class="data_intro"]/p')->text();
+    }
+
+    private function getAuthorInformationFromBaHa(Crawler $node)
+    {
+        $authorLink = $node->filterXPath('//div[@class="logo"]/a')->attr('href');
+        $authorIcon = $node->filterXPath('//div[@class="logo"]/a/img')->attr('src');
+
+        return [
+            'authorName' => str_replace('//', '', $authorLink),
+            'authorLink' => str_replace('//', 'https://', $authorLink),
+            'authorIcon' => $authorIcon,
+        ];
+    }
+
+    private function getTitleForNewAnimationFromBaHa(Crawler $node)
+    {
+        return $node->filterXPath('//div[@class="anime_name"]/h1')->text();
     }
 
     private function getDateForNewAnimationFromBaHa(Crawler $node)
@@ -141,13 +169,5 @@ class CrawlerService
     {
         return $node->filterXPath('//img[contains(@class, "lazyload")]')
             ->evaluate('string(@data-src)');
-    }
-
-    private function getInfoForNewAnimationFromBaHa(Crawler $node)
-    {
-        return $node->filterXPath('//p[contains(@class, "newanime-title")]')
-            ->each(function (Crawler $node) {
-                return $node->text();
-            });
     }
 }

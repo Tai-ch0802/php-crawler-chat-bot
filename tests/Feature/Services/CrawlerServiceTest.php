@@ -37,6 +37,10 @@ class CrawlerServiceTest extends TestCase
         $this->assertArrayHasKey('directUri', $target[0]);
         $this->assertArrayHasKey('imagePath', $target[0]);
         $this->assertArrayHasKey('label', $target[0]);
+        $this->assertArrayHasKey('text', $target[0]);
+        $this->assertArrayHasKey('authorName', $target[0]);
+        $this->assertArrayHasKey('authorLink', $target[0]);
+        $this->assertArrayHasKey('authorIcon', $target[0]);
     }
 
     public function testGetNewEpisodeFromComic99770()
