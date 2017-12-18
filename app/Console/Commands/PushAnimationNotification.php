@@ -37,9 +37,6 @@ class PushAnimationNotification extends Command
     /** @var SlackService  */
     private $slackService;
 
-    /** @var PushAnimationTransformer  */
-    private $pushAnimationTransformer;
-
     /**
      * PushAnimationNotification constructor.
      * @param CrawlerService $crawlerService
@@ -56,7 +53,6 @@ class PushAnimationNotification extends Command
         $this->crawlerService = $crawlerService;
         $this->lineBotService = $lineBotService;
         $this->slackService = $slackService;
-        $this->pushAnimationTransformer = app(PushAnimationTransformer::class);
     }
 
     /**
@@ -101,7 +97,7 @@ class PushAnimationNotification extends Command
         }
 
         $targets = array_map(function ($target) {
-            return $this->pushAnimationTransformer->transform($target);
+            return transform(PushAnimationTransformer::class, $target);
         }, $targets);
         $this->slackService->sendMessage($message, $targets, '#animation', '動漫外送員');
 

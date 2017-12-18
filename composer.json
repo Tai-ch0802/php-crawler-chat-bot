@@ -37,10 +37,15 @@
         }
     },
     "extra": {
-        "laravel": {
-            "dont-discover": [
-            ]
-        }
+      "component": "package",
+      "branch-alias": {
+        "dev-master": "1.1.x-dev"
+      },
+      "laravel": {
+        "providers": [
+          "Yish\\Generators\\GeneratorsServiceProvider"
+        ]
+      }
     },
     "scripts": {
         "post-root-package-install": [
