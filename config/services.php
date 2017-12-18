@@ -40,4 +40,9 @@ return [
         'comic99770' => env('COMIC_99770_URL', 'http://99770.hhxxee.com/comic/'),
     ],
 
+    'slack' => [
+        'channel' => '#general',
+        'username' => 'Jarvis',
+    ],
+
 ];
