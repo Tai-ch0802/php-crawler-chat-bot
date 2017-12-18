@@ -12,7 +12,8 @@
         "laravel/tinker": "~1.0",
         "linecorp/line-bot-sdk": "^2.3",
         "maknz/slack": "^1.0",
-        "symfony/dom-crawler": "^4.0"
+        "symfony/dom-crawler": "^4.0",
+        "yish/generators": "^2.0"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
