@@ -43,7 +43,6 @@ class PushComicNotification extends Command
     protected static $comicList = [
         'onePiece' => '170',
         'tokyoGhoul' => '25010',
-        'hhh' => '28620',
     ];
 
     /**
