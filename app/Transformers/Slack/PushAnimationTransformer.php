@@ -1,13 +1,9 @@
 <?php
-
 namespace App\Transformers\Slack;
 
-use Yish\Generators\Foundation\Transform\TransformContract;
-
-class PushAnimationTransformer implements TransformContract
+class PushAnimationTransformer
 {
-
-    public function transform($data)
+    public static function transform($data)
     {
         return [
             'author_name' => $data['authorName'],

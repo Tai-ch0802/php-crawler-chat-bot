@@ -97,7 +97,7 @@ class PushAnimationNotification extends Command
         }
 
         $targets = array_map(function ($target) {
-            return transform(PushAnimationTransformer::class, $target);
+            return PushAnimationTransformer::transform($target);
         }, $targets);
         $this->slackService->sendMessage($message, $targets, '#animation', '動漫外送員');
 
