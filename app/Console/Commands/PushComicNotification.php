@@ -52,8 +52,11 @@ class PushComicNotification extends Command
      * @param LineBotService $lineBotService
      * @param SlackService $slackService
      */
-    public function __construct(CrawlerService $crawlerService, LineBotService $lineBotService, SlackService $slackService)
-    {
+    public function __construct(
+        CrawlerService $crawlerService,
+        LineBotService $lineBotService,
+        SlackService $slackService
+    ) {
         parent::__construct();
         $this->path = config('services.url.comic99770');
         $this->crawlerService = $crawlerService;
