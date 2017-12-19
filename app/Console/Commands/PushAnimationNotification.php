@@ -67,18 +67,18 @@ class PushAnimationNotification extends Command
 
         $today = today()->format('m/d');
         $existedList = [];
-        $list = array_map(function ($d) use ($today, &$existedList) {
-            if (false === strpos($d['date'], $today) ||
-                in_array($d['label'], $existedList, true)
+        $list = array_map(function ($item) use ($today, &$existedList) {
+            if (false === strpos($item['date'], $today) ||
+                in_array($item['label'], $existedList, true)
             ) {
                 return null;
             }
-            if (!$this->isCorrectTime($d['directUri'])) {
+            if (!$this->isCorrectTime($item['directUri'])) {
                 return null;
             }
 
-            $existedList[] = $d['label'];
-            return $d;
+            $existedList[] = $item['label'];
+            return $item;
         }, $list);
 
         $targets = array_filter($list, function ($d) {

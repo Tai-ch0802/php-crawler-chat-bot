@@ -86,12 +86,18 @@ class CrawlerService
         $directUri = $crawler->filterXPath('//table[@class="cInfoTxt"]/tr[5]/td[2]/a')->attr('href');
         $label = $crawler->filterXPath('//table[@class="cInfoTxt"]/tr[5]/td[2]/a')->text();
         $date = $crawler->evaluate('substring-after(//table[@class="cInfoTxt"]/tr[5]/td[2], ":")');
+        $authorName = $crawler->filterXPath('//div[@class="cHBg"]/table/tr/td/div/a/img')->attr('alt');
+        $authorIcon = $crawler->filterXPath('//div[@class="cHYinYin"]/a[1]')->attr('href');
+        $authorIcon .= $crawler->filterXPath('//div[@class="cHBg"]/table/tr/td/div/a/img')->attr('src');
+
 
         return [
             'date' => array_first($date),
             'directUri' => $directUri,
             'imagePath' => $imagePath,
             'label' => $this->getFilterString($label),
+            'authorName' => $authorName,
+            'authorIcon' => $authorIcon,
         ];
     }
 
