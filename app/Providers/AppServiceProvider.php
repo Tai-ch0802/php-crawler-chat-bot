@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Services\LineBotService;
 use App\Services\SlackService;
+use App\Services\TwitchService;
+use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -31,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
         $this->lineBotRegister();
         $this->lineBotServiceRegister();
         $this->slackServiceRegister();
+        $this->twitchServiceRegister();
     }
 
     private function lineBotRegister()
@@ -57,6 +60,18 @@ class AppServiceProvider extends ServiceProvider
             ];
             $client =  new SlackClient(env('SLACK_WEBHOOK_URL'), $setting);
             return new SlackService($client);
+        });
+    }
+
+    private function twitchServiceRegister()
+    {
+        $this->app->singleton(TwitchService::class, function () {
+            $client =  new Client([
+                    'base_uri' => config('services.url.twitch'),
+                    'headers' => ['Client-ID' => env('TWITCH_CLIENT_ID')],
+                ]
+            );
+            return new TwitchService($client);
         });
     }
 }
