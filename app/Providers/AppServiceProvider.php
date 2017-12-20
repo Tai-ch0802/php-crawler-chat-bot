@@ -69,8 +69,7 @@ class AppServiceProvider extends ServiceProvider
             $client =  new Client([
                     'base_uri' => config('services.url.twitch'),
                     'headers' => ['Client-ID' => env('TWITCH_CLIENT_ID')],
-                ]
-            );
+                ]);
             return new TwitchService($client);
         });
     }

@@ -22,5 +22,4 @@ class TwitchService
     {
         return $this->client->get("/kraken/streams/?channel={$channel}");
     }
-
 }
