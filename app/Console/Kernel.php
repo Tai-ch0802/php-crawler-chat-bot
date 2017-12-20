@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\PushAnimationNotification;
 use App\Console\Commands\PushComicNotification;
+use App\Console\Commands\PushTwitchNotification;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,6 +18,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         PushAnimationNotification::class,
         PushComicNotification::class,
+        PushTwitchNotification::class,
     ];
 
     /**
