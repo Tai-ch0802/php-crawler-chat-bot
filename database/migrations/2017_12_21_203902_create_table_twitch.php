@@ -15,7 +15,7 @@ class CreateTableTwitch extends Migration
     {
         Schema::create('twitch', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('channel_id')->unique();
+            $table->integer('channel_id')->nullable()->unique();
             $table->string('channel_name')->unique();
             $table->string('name');
             $table->timestamp('created_at')->nullable();
