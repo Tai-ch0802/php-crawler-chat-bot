@@ -4,7 +4,6 @@ use Illuminate\Database\Seeder;
 use App\Models\SlackMember;
 use App\Models\Twitch;
 
-
 class TwitchTableSeeder extends Seeder
 {
     /**
