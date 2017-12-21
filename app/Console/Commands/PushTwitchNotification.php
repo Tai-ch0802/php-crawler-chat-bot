@@ -6,6 +6,7 @@ use App\Services\LineBotService;
 use App\Services\SlackService;
 use App\Services\TwitchService;
 use App\Transformers\Slack\PushTwitchTransformer;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class PushTwitchNotification extends Command
@@ -76,6 +77,10 @@ class PushTwitchNotification extends Command
             );
             if (!empty($response['streams'])) {
                 $stream = array_first($response['streams']);
+                if (!$this->isWithinTenMinutesAgo($stream['created_at'])) {
+                    return null;
+                }
+
                 $channel = $stream['channel'];
                 return [
                     'authorName' => $channel['display_name'],
@@ -103,5 +108,17 @@ class PushTwitchNotification extends Command
         $this->slackService->sendMessage('最新實況來啦!', $targets, '#twitch', '實況播報員');
 
         echo 'enjoy it!';
+    }
+
+
+    private function isWithinTenMinutesAgo(string $time)
+    {
+        $target = Carbon::createFromFormat(DATE_ATOM, $time, 'UTC')->timestamp;
+        $tenMinutes = now()->subMinutes(11)->timestamp;
+
+        if ($target >= $tenMinutes) {
+            return true;
+        }
+        return false;
     }
 }
