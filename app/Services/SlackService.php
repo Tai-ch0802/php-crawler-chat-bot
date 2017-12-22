@@ -5,6 +5,15 @@ use Maknz\Slack\Client as SlackClient;
 
 class SlackService
 {
+    public const SLASH_COMMAND_REPLY_PUBLIC = 'in_channel';
+    public const SLASH_COMMAND_REPLY_PRIVATE = 'ephemeral';
+
+    public const ATTACH_COLOR_BLUE = '#000079';
+    public const ATTACH_COLOR_RED = '#FF0000';
+    public const ATTACH_COLOR_GREEN = '#00BB00';
+    public const ATTACH_COLOR_ORANGE = '#FF5809';
+
+
     /** @var SlackClient  */
     private $client;
 
