@@ -94,6 +94,9 @@ class SlackService
                     'title' => $title,
                     'text' => $text,
                     'color' => $color,
+                    'mrkdwn_in' =>  [
+                        'text',
+                    ],
                 ],
             ],
         ];
