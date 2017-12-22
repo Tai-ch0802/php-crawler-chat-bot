@@ -73,4 +73,27 @@ class SlackService
         }
         $this->client->sendMessage($message);
     }
+
+    /**
+     * @param string $title
+     * @param string $text
+     * @param string $responseType
+     * @param string $color
+     * @return array
+     */
+    public function buildSlashCommandResponse(
+        string $title,
+        string $text,
+        string $responseType = self::SLASH_COMMAND_REPLY_PRIVATE,
+        string $color = self::ATTACH_COLOR_BLUE
+    ): array {
+        return [
+            'response_type' => $responseType,
+            'attachments' => [
+                'title' => $title,
+                'text' => $text,
+                'color' => $color,
+            ],
+        ];
+    }
 }

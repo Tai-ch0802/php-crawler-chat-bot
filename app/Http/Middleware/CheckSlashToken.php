@@ -10,9 +10,10 @@ class CheckSlashToken
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
+     * @throws \InvalidArgumentException
      */
     public function handle($request, Closure $next)
     {
@@ -22,9 +23,10 @@ class CheckSlashToken
             config('services.slack.slash.animation'),
         ];
         if (!in_array($request->token, $tokens, true)) {
-            return new Response([
+            $data = [
                 'text' => 'Invalid Token!',
-            ], 401);
+            ];
+            return response()->json($data)->setStatusCode(401);
         }
         return $next($request);
     }

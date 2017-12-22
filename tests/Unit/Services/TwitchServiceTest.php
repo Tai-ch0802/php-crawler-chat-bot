@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Feature\Services;
+namespace Tests\Unit\Services;
 
 use App\Services\TwitchService;
 use Tests\TestCase;
