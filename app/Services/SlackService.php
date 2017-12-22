@@ -5,6 +5,15 @@ use Maknz\Slack\Client as SlackClient;
 
 class SlackService
 {
+    public const SLASH_COMMAND_REPLY_PUBLIC = 'in_channel';
+    public const SLASH_COMMAND_REPLY_PRIVATE = 'ephemeral';
+
+    public const ATTACH_COLOR_BLUE = '#000079';
+    public const ATTACH_COLOR_RED = '#FF0000';
+    public const ATTACH_COLOR_GREEN = '#00BB00';
+    public const ATTACH_COLOR_ORANGE = '#FF5809';
+
+
     /** @var SlackClient  */
     private $client;
 
@@ -63,5 +72,28 @@ class SlackService
             $message->from($userName);
         }
         $this->client->sendMessage($message);
+    }
+
+    /**
+     * @param string $title
+     * @param string $text
+     * @param string $responseType
+     * @param string $color
+     * @return array
+     */
+    public function buildSlashCommandResponse(
+        string $title,
+        string $text,
+        string $responseType = self::SLASH_COMMAND_REPLY_PRIVATE,
+        string $color = self::ATTACH_COLOR_BLUE
+    ): array {
+        return [
+            'response_type' => $responseType,
+            'attachments' => [
+                'title' => $title,
+                'text' => $text,
+                'color' => $color,
+            ],
+        ];
     }
 }
