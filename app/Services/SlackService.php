@@ -90,9 +90,11 @@ class SlackService
         return [
             'response_type' => $responseType,
             'attachments' => [
-                'title' => $title,
-                'text' => $text,
-                'color' => $color,
+                [
+                    'title' => $title,
+                    'text' => $text,
+                    'color' => $color,
+                ],
             ],
         ];
     }
