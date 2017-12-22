@@ -31,7 +31,7 @@ class SlashCommandTest extends TestCase
     public function testReturn200WhenReplySlashCommandTwitch()
     {
         $token = config('services.slack.slash.twitch');
-        if (null === $token) {
+        if (empty($token)) {
             $this->markTestSkipped('none token');
         }
         $data = [
