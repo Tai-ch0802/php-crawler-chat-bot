@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers;
 
-
 use App\Services\SlackService;
 use App\Services\TwitchService;
 use Illuminate\Http\Request;
