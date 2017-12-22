@@ -32,11 +32,11 @@ class SlackController extends Controller
 
             default:
                 $content = [
-                    '**/twitch list**',
+                    '*/twitch list*',
                     '   查看現在已經在追蹤的實況主名單',
-                    '**/twitch add < 實況主名稱 > < 實況主頻道id >**',
+                    '*/twitch add < 實況主名稱 > < 實況主頻道id >*',
                     '   舉例：/twitch add 小熊 yuniko0720',
-                    '**/twitch delete < 實況主頻道id >**',
+                    '*/twitch delete < 實況主頻道id >*',
                     '   舉例：/twitch delete yuniko0720',
                 ];
                 $response = $slackService->buildSlashCommandResponse(
