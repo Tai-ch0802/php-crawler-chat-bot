@@ -77,6 +77,7 @@ class SlackService
     /**
      * @param string $title
      * @param string $text
+     * @param array $fields
      * @param string $responseType
      * @param string $color
      * @return array
@@ -84,6 +85,7 @@ class SlackService
     public function buildSlashCommandResponse(
         string $title,
         string $text,
+        array $fields = [],
         string $responseType = self::SLASH_COMMAND_REPLY_PRIVATE,
         string $color = self::ATTACH_COLOR_BLUE
     ): array {
@@ -93,6 +95,7 @@ class SlackService
                 [
                     'title' => $title,
                     'text' => $text,
+                    'fields' => $fields,
                     'color' => $color,
                     'mrkdwn_in' =>  [
                         'text',
