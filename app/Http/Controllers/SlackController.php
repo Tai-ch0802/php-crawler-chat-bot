@@ -19,6 +19,12 @@ class SlackController extends Controller
         switch ($command) {
             case 'list':
                 //TODO show list
+                $fields = $twitchService->buildFollowList();
+                $response = $slackService->buildSlashCommandResponse(
+                    'Twitch追蹤名單',
+                    "目前共有 {$fields->count()} 位實況主追蹤中",
+                    $fields->toArray()
+                );
                 break;
 
             case 'add':
@@ -31,19 +37,27 @@ class SlackController extends Controller
                 break;
 
             default:
-                $content = [
-                    '*/twitch list*',
-                    '   查看現在已經在追蹤的實況主名單',
-                    '*/twitch add < 實況主名稱 > < 實況主頻道id >*',
-                    '   舉例：/twitch add 小熊 yuniko0720',
-                    '*/twitch delete < 實況主頻道id >*',
-                    '   舉例：/twitch delete yuniko0720',
+                $fields = [
+                    [
+                        'title' => '/twitch list',
+                        'value' => '查看現在已經在追蹤的實況主名單',
+                    ],
+                    [
+                        'title' => '/twitch add <實況主名稱> <實況主頻道id>',
+                        'value' => "新增追蹤實況主\n舉例：/twitch add 小熊 yuniko0720",
+                    ],
+                    [
+                        'title' => '/twitch add <實況主名稱> <實況主頻道id>',
+                        'value' => "刪除追蹤對象\n舉例：/twitch delete yuniko0720",
+                    ],
                 ];
                 $response = $slackService->buildSlashCommandResponse(
+                    'Twitch支援指令清單',
                     '你可以輸入以下指令',
-                    implode(PHP_EOL, $content)
+                    $fields
                 );
         }
+        $response['response_url'] = $request->input('response_url');
         return response()->json($response);
     }
 }

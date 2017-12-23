@@ -28,7 +28,7 @@ class SlashCommandTest extends TestCase
     /**
      * @testdox 回傳指令清單
      */
-    public function testReturn200WhenReplySlashCommandTwitch()
+    public function testReturn200WhenReplySlashCommandTwitchPart1()
     {
         $token = config('services.slack.slash.twitch');
         if (empty($token)) {
@@ -44,6 +44,33 @@ class SlashCommandTest extends TestCase
             'user_name'=> '',
             'command'=> '',
             'text'=> '',
+            'response_url'=> '',
+        ];
+
+        $response = $this->post('/api/slack/slash-commands/twitch', $data);
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * @testdox 回傳追蹤名單
+     */
+    public function testReturn200WhenReplySlashCommandTwitchPart2()
+    {
+        $token = config('services.slack.slash.twitch');
+        if (empty($token)) {
+            $this->markTestSkipped('none token');
+        }
+        $data = [
+            'token' => $token,
+            'team_id'=> '',
+            'team_domain'=> '',
+            'channel_id'=> '',
+            'channel_name'=> '',
+            'user_id'=> '',
+            'user_name'=> '',
+            'command'=> '',
+            'text'=> 'list',
             'response_url'=> '',
         ];
 

@@ -67,10 +67,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(TwitchService::class, function () {
             $client =  new Client([
-                    'base_uri' => config('services.url.twitch'),
+                    'base_uri' => config('services.api.twitch'),
                     'headers' => ['Client-ID' => env('TWITCH_CLIENT_ID')],
                 ]);
-            return new TwitchService($client);
+            return new TwitchService($client, config('services.url.twitch'));
         });
     }
 }

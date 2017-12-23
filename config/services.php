@@ -38,6 +38,10 @@ return [
     'url' => [
         'baHa' => env('BA_HA_URL', 'https://ani.gamer.com.tw/'),
         'comic99770' => env('COMIC_99770_URL', 'http://99770.hhxxee.com/comic/'),
+        'twitch' => 'https://www.twitch.tv/',
+    ],
+
+    'api' => [
         'twitch' => 'https://api.twitch.tv',
     ],
 
