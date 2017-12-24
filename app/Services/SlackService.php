@@ -113,12 +113,14 @@ class SlackService
      */
     public function getUpdater(string $userId, string $userName): SlackMember
     {
+
         $updater = SlackMember::where('user_id', $userId)->get()->first();
+
         if (null === $updater) {
-            $updater = SlackMember::create([
-                'user_id' => $userId,
-                'user_name' => $userName,
-            ]);
+            $updater = new SlackMember();
+            $updater->user_name = $userName;
+            $updater->user_id = $userId;
+            $updater->save();
         }
         return $updater;
     }
