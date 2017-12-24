@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Models\SlackMember;
 use Maknz\Slack\Client as SlackClient;
 
 class SlackService
@@ -14,7 +15,7 @@ class SlackService
     public const ATTACH_COLOR_ORANGE = '#FF5809';
 
 
-    /** @var SlackClient  */
+    /** @var SlackClient */
     private $client;
 
     public function __construct(SlackClient $client)
@@ -97,11 +98,28 @@ class SlackService
                     'text' => $text,
                     'fields' => $fields,
                     'color' => $color,
-                    'mrkdwn_in' =>  [
+                    'mrkdwn_in' => [
                         'text',
                     ],
                 ],
             ],
         ];
+    }
+
+    /**
+     * @param string $userId
+     * @param string $userName
+     * @return SlackMember
+     */
+    public function getUpdater(string $userId, string $userName): SlackMember
+    {
+        $updater = SlackMember::where('user_id', $userId)->get()->first();
+        if (null === $updater) {
+            $updater = SlackMember::create([
+                'user_id' => $userId,
+                'user_name' => $userName,
+            ]);
+        }
+        return $updater;
     }
 }

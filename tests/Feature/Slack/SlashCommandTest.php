@@ -1,10 +1,12 @@
 <?php
 namespace Tests\Feature\Slack;
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class SlashCommandTest extends TestCase
 {
+    use DatabaseTransactions;
 
     public function setUp()
     {
@@ -40,8 +42,8 @@ class SlashCommandTest extends TestCase
             'team_domain'=> '',
             'channel_id'=> '',
             'channel_name'=> '',
-            'user_id'=> '',
-            'user_name'=> '',
+            'user_id'=> 'admin',
+            'user_name'=> 'admin',
             'command'=> '',
             'text'=> '',
             'response_url'=> '',
@@ -67,10 +69,91 @@ class SlashCommandTest extends TestCase
             'team_domain'=> '',
             'channel_id'=> '',
             'channel_name'=> '',
-            'user_id'=> '',
-            'user_name'=> '',
+            'user_id'=> 'admin',
+            'user_name'=> 'admin',
             'command'=> '',
             'text'=> 'list',
+            'response_url'=> '',
+        ];
+
+        $response = $this->post('/api/slack/slash-commands/twitch', $data);
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * @testdox 新增追蹤名單
+     */
+    public function testReturn200WhenReplySlashCommandTwitchPart3()
+    {
+        $token = config('services.slack.slash.twitch');
+        if (empty($token)) {
+            $this->markTestSkipped('none token');
+        }
+        $data = [
+            'token' => $token,
+            'team_id'=> '',
+            'team_domain'=> '',
+            'channel_id'=> '',
+            'channel_name'=> '',
+            'user_id'=> 'admin',
+            'user_name'=> 'admin',
+            'command'=> '',
+            'text'=> 'add test testChannelId',
+            'response_url'=> '',
+        ];
+
+        $response = $this->post('/api/slack/slash-commands/twitch', $data);
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * @testdox 刪除追蹤名單
+     */
+    public function testReturn200WhenReplySlashCommandTwitchPart4()
+    {
+        $token = config('services.slack.slash.twitch');
+        if (empty($token)) {
+            $this->markTestSkipped('none token');
+        }
+        $data = [
+            'token' => $token,
+            'team_id'=> '',
+            'team_domain'=> '',
+            'channel_id'=> '',
+            'channel_name'=> '',
+            'user_id'=> 'admin',
+            'user_name'=> 'admin',
+            'command'=> '',
+            'text'=> 'delete testChannelId',
+            'response_url'=> '',
+        ];
+
+        $response = $this->post('/api/slack/slash-commands/twitch', $data);
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * @testdox 刪除不存在的追蹤名單
+     */
+    public function testReturn200WhenReplySlashCommandTwitchPart5()
+    {
+        $token = config('services.slack.slash.twitch');
+        if (empty($token)) {
+            $this->markTestSkipped('none token');
+        }
+        $data = [
+            'token' => $token,
+            'team_id'=> '',
+            'team_domain'=> '',
+            'channel_id'=> '',
+            'channel_name'=> '',
+            'user_id'=> 'admin',
+            'user_name'=> 'admin',
+            'command'=> '',
+            'text'=> 'delete unknownChannelId',
             'response_url'=> '',
         ];
 
