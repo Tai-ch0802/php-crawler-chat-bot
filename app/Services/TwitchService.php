@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Models\SlackMember;
 use App\Models\Twitch;
 use GuzzleHttp\Client;
 use Illuminate\Support\Collection;
@@ -32,6 +33,7 @@ class TwitchService
      */
     public function buildFollowList(): Collection
     {
+        //FIXME use repository(?)
         $collection = Twitch::all();
 
         $collection->transform(function (Twitch $item) {
@@ -46,5 +48,67 @@ class TwitchService
         });
 
         return $collection;
+    }
+
+    /**
+     * @param string $presenterName
+     * @param string $channelName
+     * @param SlackMember $updater
+     * @return array
+     */
+    public function buildNewSubscription(string $presenterName, string $channelName, SlackMember $updater): array
+    {
+        //TODO verify the endpoint
+
+        //FIXME use repository(?)
+        $twitch = new Twitch();
+        $twitch->channel_name = $channelName;
+        $twitch->name = $presenterName;
+        $twitch->created_by = $updater->id;
+        $twitch->updated_by = $updater->id;
+        $twitch->save();
+
+        return [
+            [
+                'title' => $twitch->name,
+                'value' => implode(PHP_EOL, [
+                    "實況網址： {$this->url}{$twitch->channel_name}",
+                    "追蹤日期： {$twitch->created_at}",
+                    "追蹤建立人： {$twitch->creator->user_name}",
+                ]),
+            ],
+        ];
+    }
+
+    /**
+     * @param string $channelName
+     * @param SlackMember $updater
+     * @return null|array
+     * @throws \Exception
+     */
+    public function buildDeleteSubscription(string $channelName, SlackMember $updater): ?array
+    {
+        //FIXME use repository(?)
+        /** @var Twitch $twitch */
+        $twitch = Twitch::where('channel_name', $channelName)->first();
+        if (null === $twitch) {
+            return null;
+        }
+
+        $data = [
+            [
+                'title' => $twitch->name,
+                'value' => implode(PHP_EOL, [
+                    "實況網址： {$this->url}{$twitch->channel_name}",
+                    "追蹤日期： {$twitch->created_at}",
+                    "追蹤建立人： {$twitch->creator->user_name}",
+                    "刪除操作者： {$updater->user_name}",
+                ]),
+            ],
+        ];
+
+        $twitch->delete();
+
+        return $data;
     }
 }
