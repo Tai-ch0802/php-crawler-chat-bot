@@ -1,10 +1,12 @@
 <?php
 namespace Tests\Feature\Slack;
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class SlashCommandTest extends TestCase
 {
+    use DatabaseTransactions;
 
     public function setUp()
     {
