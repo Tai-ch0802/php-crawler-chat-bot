@@ -111,4 +111,13 @@ class TwitchService
 
         return $data;
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getAll()
+    {
+        //FIXME use repository(?)
+        return Twitch::all();
+    }
 }
