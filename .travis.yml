@@ -3,16 +3,21 @@ php:
 - 7.1
 sudo: true
 services:
-  - docker
+  - mysql
 env:
-- APP_DEBUG=false
+  global:
+    DB_HOST: 127.0.0.1
+    DB_PORT: 3306
+    DB_DATABASE: testdatabase
+    DB_USERNAME: root
+    DB_PASSWORD: password
+
 before_script:
 - composer install
 - cp .env.example .env
 before_install:
-- docker pull mysql
-- docker run --name docker-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=testdatabase -e MYSQL_USER=testuser -e MYSQL_PASSWORD=password -d -p 3306:3306 mysql:latest
-- docker ps -a
+- mysql -e "CREATE DATABASE testdatabase DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;"
+- mysql -e "SET PASSWORD = PASSWORD('password');"
 install:
 - composer install
 script:
