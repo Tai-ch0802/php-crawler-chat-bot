@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Twitch;
 use App\Services\LineBotService;
 use App\Services\SlackService;
 use App\Services\TwitchService;
@@ -24,17 +25,6 @@ class PushTwitchNotification extends Command
      * @var string
      */
     protected $description = '推送追蹤的開台實況主';
-
-    /**
-     * @var array 追蹤的實況主
-     */
-    protected static $broadcastList = [
-        'yuniko0720',           //小熊
-        'nightblue3',           //nightblue3
-        'cawai0147',            //蛋捲
-        'asiagodtonegg3be0',    //統神
-    ];
-
 
     /** @var TwitchService  */
     private $twitchService;
@@ -70,6 +60,10 @@ class PushTwitchNotification extends Command
      */
     public function handle()
     {
+        $broadcastList = $this->twitchService->getAll()->transform(function (Twitch $twitch) {
+            return $twitch->channel_name;
+        })->toArray();
+
         $targets = array_map(function ($broadcast) {
             $response = json_decode(
                 $this->twitchService->getLiveStreams($broadcast)->getBody()->getContents(),
@@ -92,7 +86,7 @@ class PushTwitchNotification extends Command
                 ];
             }
             return null;
-        }, self::$broadcastList);
+        }, $broadcastList);
 
         $targets = array_filter($targets, function ($d) {
             return null !== $d;
