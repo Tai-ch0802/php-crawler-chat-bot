@@ -2,14 +2,21 @@ language: php
 php:
 - 7.1
 sudo: true
+services:
+  - docker
 env:
 - APP_DEBUG=false
 before_script:
 - composer install
 - cp .env.example .env
+before_install:
+- docker pull mysql
+- docker run --name docker-mysql -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=testdatabase -e MYSQL_USER=testuser -e MYSQL_PASSWORD=password -d -p 3306:3306 mysql:latest
+- docker ps -a
 install:
 - composer install
 script:
+- composer database
 - php vendor/bin/phpcs
 - php vendor/bin/phpunit
 deploy:
