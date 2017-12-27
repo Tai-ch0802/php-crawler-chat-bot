@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Helper;
 use App\Services\CrawlerService;
 use App\Services\LineBotService;
 use App\Services\SlackService;
@@ -97,7 +98,7 @@ class PushAnimationNotification extends Command
         }
 
         $targets = array_map(function ($target) {
-            return PushAnimationTransformer::transform($target);
+            return Helper::transform(PushAnimationTransformer::class, $target);
         }, $targets);
         $this->slackService->sendMessage($message, $targets, '#animation', '動漫外送員');
 

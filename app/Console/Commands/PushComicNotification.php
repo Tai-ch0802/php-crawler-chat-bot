@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Helper;
 use App\Services\CrawlerService;
 use App\Services\LineBotService;
 use App\Services\SlackService;
@@ -102,7 +103,7 @@ class PushComicNotification extends Command
         }
 
         $targets = array_map(function ($target) {
-            return PushComicTransformer::transform($target);
+            return Helper::transform(PushComicTransformer::class, $target);
         }, $targets);
 
         $this->slackService->sendMessage($message, $targets, '#comic', '動漫外送員');
