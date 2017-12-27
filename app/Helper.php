@@ -12,7 +12,7 @@ class Helper
      * @return array
      * @throws RuntimeException
      */
-    public static function transform($instance, array $date): array
+    public static function slackTransform($instance, array $date): array
     {
         /** @var TransformerInterface $target */
         $target = app($instance);
