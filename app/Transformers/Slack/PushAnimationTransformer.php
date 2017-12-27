@@ -1,9 +1,11 @@
 <?php
 namespace App\Transformers\Slack;
 
-class PushAnimationTransformer
+use App\Transformers\TransformerInterface;
+
+class PushAnimationTransformer implements TransformerInterface
 {
-    public static function transform($data)
+    public function transform($data)
     {
         return [
             'author_name' => $data['authorName'],

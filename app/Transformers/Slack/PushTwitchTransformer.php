@@ -1,9 +1,11 @@
 <?php
 namespace App\Transformers\Slack;
 
-class PushTwitchTransformer
+use App\Transformers\TransformerInterface;
+
+class PushTwitchTransformer implements TransformerInterface
 {
-    public static function transform($data)
+    public function transform($data)
     {
         return [
             'author_name' => $data['authorName'],
