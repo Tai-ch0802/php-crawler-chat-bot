@@ -6,6 +6,7 @@ use App\Services\LineBotService;
 use App\Services\SlackService;
 use App\Services\TwitchService;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
@@ -20,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Schema::defaultStringLength(191);
     }
 
     /**
