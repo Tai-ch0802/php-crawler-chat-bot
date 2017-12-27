@@ -98,7 +98,7 @@ class PushTwitchNotification extends Command
         }
 
         $targets = array_map(function ($target) {
-            return Helper::transform(PushTwitchTransformer::class, $target);
+            return Helper::slackTransform(PushTwitchTransformer::class, $target);
         }, $targets);
         $this->slackService->sendMessage('最新實況來啦!', $targets, '#twitch', '實況播報員');
 

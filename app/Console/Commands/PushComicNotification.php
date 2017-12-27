@@ -103,7 +103,7 @@ class PushComicNotification extends Command
         }
 
         $targets = array_map(function ($target) {
-            return Helper::transform(PushComicTransformer::class, $target);
+            return Helper::slackTransform(PushComicTransformer::class, $target);
         }, $targets);
 
         $this->slackService->sendMessage($message, $targets, '#comic', '動漫外送員');
