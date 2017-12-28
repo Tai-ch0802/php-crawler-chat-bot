@@ -18,7 +18,7 @@ class TwitchList implements SlashCommandsInterface
     /** @var SlackService */
     private $slackService;
 
-    public function __construct(array $command = [], SlackMember $operator)
+    public function __construct(array $command = [], SlackMember $operator = null)
     {
         $this->command = $command;
         $this->operator = $operator;

@@ -1,7 +1,6 @@
 <?php
 namespace App\SlashCommands;
 
-
 use App\Services\SlackService;
 
 trait SlashCommandsTrait
