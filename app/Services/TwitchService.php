@@ -1,8 +1,13 @@
 <?php
 namespace App\Services;
 
+use App\Helper;
 use App\Models\SlackMember;
 use App\Models\Twitch;
+use App\SlashCommands\TwitchAdd;
+use App\SlashCommands\TwitchDefault;
+use App\SlashCommands\TwitchDelete;
+use App\SlashCommands\TwitchList;
 use GuzzleHttp\Client;
 use Illuminate\Support\Collection;
 use Psr\Http\Message\ResponseInterface;
@@ -119,5 +124,25 @@ class TwitchService
     {
         //FIXME use repository(?)
         return Twitch::all();
+    }
+
+    /**
+     * @param string $text
+     * @param SlackMember $operator
+     * @return array
+     */
+    public function replySlashCommand(string $text, SlackMember $operator)
+    {
+        $command = explode(' ', $text);
+        $action = $command[0];
+
+        $actions = [
+            'list' => TwitchList::class,
+            'add' => TwitchAdd::class,
+            'delete' => TwitchDelete::class,
+        ];
+        $instance = array_get($actions, $action, TwitchDefault::class);
+
+        return Helper::toSlashCommand($instance, $command, $operator);
     }
 }
