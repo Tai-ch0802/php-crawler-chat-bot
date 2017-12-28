@@ -220,6 +220,7 @@ class TwitchService
                 );
         }
 
+        //TODO Trait
         if (empty($response)) {
             $response = $slackService->buildSlashCommandResponse(
                 'Twitch輸入指令錯誤',
