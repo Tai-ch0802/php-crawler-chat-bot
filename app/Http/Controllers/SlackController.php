@@ -16,7 +16,10 @@ class SlackController extends Controller
             $request->input('user_id'),
             $request->input('user_name')
         );
-        $text = $request->input('text', '');
+        $text = $request->input('text', '--help');
+        if (empty($test)) {
+            $text = '--help';
+        }
 
         $response = $twitchService->replySlashCommand($text, $updater);
 
