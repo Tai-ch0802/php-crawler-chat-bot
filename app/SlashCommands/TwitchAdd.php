@@ -11,17 +11,17 @@ class TwitchAdd implements SlashCommandsInterface
 
     private $command;
     /** @var SlackMember */
-    private $updater;
+    private $operator;
 
     /** @var TwitchService */
     private $twitchService;
     /** @var SlackService */
     private $slackService;
 
-    public function __construct(array $command = [], SlackMember $updater)
+    public function __construct(array $command = [], SlackMember $operator)
     {
         $this->command = $command;
-        $this->updater = $updater;
+        $this->operator = $operator;
         $this->twitchService = app(TwitchService::class);
         $this->slackService = app(SlackService::class);
     }
@@ -43,7 +43,7 @@ class TwitchAdd implements SlashCommandsInterface
         }
 
 
-        $fields = $this->twitchService->buildNewSubscription($presenterName, $channelName, $this->updater);
+        $fields = $this->twitchService->buildNewSubscription($presenterName, $channelName, $this->operator);
         return $this->slackService->buildSlashCommandResponse(
             '有新實況主納入追蹤名單！',
             '請參考以下資訊',

@@ -12,7 +12,7 @@ class SlackController extends Controller
         SlackService $slackService,
         Request $request
     ) {
-        $updater = $slackService->getUpdater(
+        $operator = $slackService->getUpdater(
             $request->input('user_id'),
             $request->input('user_name')
         );
@@ -21,7 +21,7 @@ class SlackController extends Controller
             $text = '--help';
         }
 
-        $response = $twitchService->replySlashCommand($text, $updater);
+        $response = $twitchService->replySlashCommand($text, $operator);
 
         $response['response_url'] = $request->input('response_url');
         return response()->json($response);

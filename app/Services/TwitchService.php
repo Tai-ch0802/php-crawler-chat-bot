@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Helper;
 use App\Models\SlackMember;
 use App\Models\Twitch;
 use App\SlashCommands\TwitchAdd;
@@ -127,35 +128,21 @@ class TwitchService
 
     /**
      * @param string $text
-     * @param SlackMember $updater
+     * @param SlackMember $operator
      * @return array
      */
-    public function replySlashCommand(string $text, SlackMember $updater)
+    public function replySlashCommand(string $text, SlackMember $operator)
     {
         $command = explode(' ', $text);
         $action = $command[0];
 
-        switch ($action) {
-            case 'list':
-                //TODO show list
-                $target = new TwitchList($command, $updater);
-                break;
+        $actions = [
+            'list' => TwitchList::class,
+            'add' => TwitchAdd::class,
+            'delete' => TwitchDelete::class,
+        ];
+        $instance = array_get($actions, $action, TwitchDefault::class);
 
-            case 'add':
-                //TODO add new item, example: /twitch add <name> <channelName>
-                $target = new TwitchAdd($command, $updater);
-                break;
-
-            case 'delete':
-                //TODO add new item, example: /twitch delete <channelName>
-                //TODO add permission(?)
-                $target = new TwitchDelete($command, $updater);
-                break;
-
-            default:
-                $target = new TwitchDefault($command, $updater);
-        }
-
-        return $target->buildReply();
+        return Helper::toSlashCommand($instance, $command, $operator);
     }
 }

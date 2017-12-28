@@ -11,15 +11,15 @@ class TwitchDefault implements SlashCommandsInterface
 
     private $command;
     /** @var SlackMember */
-    private $updater;
+    private $operator;
 
     /** @var SlackService */
     private $slackService;
 
-    public function __construct(array $command = [], SlackMember $updater)
+    public function __construct(array $command = [], SlackMember $operator)
     {
         $this->command = $command;
-        $this->updater = $updater;
+        $this->operator = $operator;
         $this->slackService = app(SlackService::class);
     }
 

@@ -55,6 +55,7 @@ class SlackServiceTest extends TestCase
 
     public function testSendMessageWithMarkdown()
     {
+        $this->markTestSkipped('OK!');
         $attach = [
             [
                 'author_name' => 'Test',

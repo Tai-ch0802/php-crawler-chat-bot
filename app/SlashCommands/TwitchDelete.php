@@ -11,17 +11,17 @@ class TwitchDelete implements SlashCommandsInterface
 
     private $command;
     /** @var SlackMember */
-    private $updater;
+    private $operator;
 
     /** @var TwitchService */
     private $twitchService;
     /** @var SlackService */
     private $slackService;
 
-    public function __construct(array $command = [], SlackMember $updater)
+    public function __construct(array $command = [], SlackMember $operator)
     {
         $this->command = $command;
-        $this->updater = $updater;
+        $this->operator = $operator;
         $this->twitchService = app(TwitchService::class);
         $this->slackService = app(SlackService::class);
     }
@@ -34,7 +34,7 @@ class TwitchDelete implements SlashCommandsInterface
         if (null === $channelName) {
             return $this->invalidTyping();
         }
-        $fields = $this->twitchService->buildDeleteSubscription($channelName, $this->updater);
+        $fields = $this->twitchService->buildDeleteSubscription($channelName, $this->operator);
         if (null === $fields) {
             return $this->slackService->buildSlashCommandResponse(
                 '本來就沒有追蹤這頻道！',

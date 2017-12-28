@@ -11,17 +11,17 @@ class TwitchList implements SlashCommandsInterface
 
     private $command;
     /** @var SlackMember */
-    private $updater;
+    private $operator;
 
     /** @var TwitchService */
     private $twitchService;
     /** @var SlackService */
     private $slackService;
 
-    public function __construct(array $command = [], SlackMember $updater)
+    public function __construct(array $command = [], SlackMember $operator)
     {
         $this->command = $command;
-        $this->updater = $updater;
+        $this->operator = $operator;
         $this->twitchService = app(TwitchService::class);
         $this->slackService = app(SlackService::class);
     }
