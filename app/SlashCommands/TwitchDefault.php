@@ -7,6 +7,8 @@ use App\Services\TwitchService;
 
 class TwitchDefault implements SlashCommandsInterface
 {
+    use SlashCommandsTrait;
+
     private $command;
     /** @var SlackMember */
     private $updater;

@@ -7,6 +7,8 @@ use App\Services\TwitchService;
 
 class TwitchDelete implements SlashCommandsInterface
 {
+    use SlashCommandsTrait;
+
     private $command;
     /** @var SlackMember */
     private $updater;
@@ -26,12 +28,12 @@ class TwitchDelete implements SlashCommandsInterface
 
     public function buildReply()
     {
-        $channelName = $command[1] ?? null;
+        $channelName = $this->command[1] ?? null;
 
         //TODO use Trait
-//        if (null === $channelName) {
-//            break;
-//        }
+        if (null === $channelName) {
+            return $this->invalidTyping();
+        }
         $fields = $this->twitchService->buildDeleteSubscription($channelName, $this->updater);
         if (null === $fields) {
             return $this->slackService->buildSlashCommandResponse(

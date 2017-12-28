@@ -7,6 +7,8 @@ use App\Services\TwitchService;
 
 class TwitchAdd implements SlashCommandsInterface
 {
+    use SlashCommandsTrait;
+
     private $command;
     /** @var SlackMember */
     private $updater;
@@ -26,20 +28,19 @@ class TwitchAdd implements SlashCommandsInterface
 
     public function buildReply()
     {
-        $presenterName = $command[1] ?? null;
-        $channelName = $command[2] ?? null;
+        $presenterName = $this->command[1] ?? null;
+        $channelName = $this->command[2] ?? null;
 
-        //TODO use Trait
-//        if (in_array(
-//            null,
-//            [
-//                $presenterName,
-//                $channelName
-//            ],
-//            true
-//        )) {
-//            break;
-//        }
+        if (in_array(
+            null,
+            [
+                $presenterName,
+                $channelName
+            ],
+            true
+        )) {
+            return $this->invalidTyping();
+        }
 
 
         $fields = $this->twitchService->buildNewSubscription($presenterName, $channelName, $this->updater);
