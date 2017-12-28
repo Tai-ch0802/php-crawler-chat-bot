@@ -3,7 +3,9 @@ namespace App\Http\Controllers;
 
 use App\Services\SlackService;
 use App\Services\TwitchService;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SlackController extends Controller
 {
@@ -115,7 +117,9 @@ class SlackController extends Controller
             );
         }
 
-        $response['response_url'] = $request->input('response_url');
-        return response()->json($response);
+        $to = new Client();
+        $to->post($request->input('response_url'), $response);
+
+        return response()->setStatusCode(204);
     }
 }
