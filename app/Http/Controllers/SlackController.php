@@ -17,7 +17,7 @@ class SlackController extends Controller
             $request->input('user_name')
         );
         $text = $request->input('text', '--help');
-        if (empty($test)) {
+        if (empty($text)) {
             $text = '--help';
         }
 
