@@ -33,7 +33,10 @@ class Helper
     public static function toSlashCommand($instance, array $command, SlackMember $operator): array
     {
         /** @var SlashCommandsInterface $target */
-        $target = app($instance, [$command, $operator]);
+        $target = app($instance, [
+            'command' => $command,
+            'operator' => $operator
+        ]);
         if (!$target instanceof SlashCommandsInterface) {
             throw new RuntimeException("{$instance} is not SlashCommandsInterface!");
         }
