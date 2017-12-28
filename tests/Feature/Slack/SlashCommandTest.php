@@ -46,12 +46,12 @@ class SlashCommandTest extends TestCase
             'user_name'=> 'admin',
             'command'=> '',
             'text'=> '',
-            'response_url'=> '',
+            'response_url'=> 'https://hooks.slack.com/commands/1234/5678',
         ];
 
         $response = $this->post('/api/slack/slash-commands/twitch', $data);
 
-        $response->assertStatus(200);
+        $response->assertStatus(204);
     }
 
     /**
@@ -73,12 +73,12 @@ class SlashCommandTest extends TestCase
             'user_name'=> 'admin',
             'command'=> '',
             'text'=> 'list',
-            'response_url'=> '',
+            'response_url'=> 'https://hooks.slack.com/commands/1234/5678',
         ];
 
         $response = $this->post('/api/slack/slash-commands/twitch', $data);
 
-        $response->assertStatus(200);
+        $response->assertStatus(204);
     }
 
     /**
@@ -100,12 +100,12 @@ class SlashCommandTest extends TestCase
             'user_name'=> 'admin',
             'command'=> '',
             'text'=> 'add test testChannelId',
-            'response_url'=> '',
+            'response_url'=> 'https://hooks.slack.com/commands/1234/5678',
         ];
 
         $response = $this->post('/api/slack/slash-commands/twitch', $data);
 
-        $response->assertStatus(200);
+        $response->assertStatus(204);
     }
 
     /**
@@ -127,12 +127,12 @@ class SlashCommandTest extends TestCase
             'user_name'=> 'admin',
             'command'=> '',
             'text'=> 'delete testChannelId',
-            'response_url'=> '',
+            'response_url'=> 'https://hooks.slack.com/commands/1234/5678',
         ];
 
         $response = $this->post('/api/slack/slash-commands/twitch', $data);
 
-        $response->assertStatus(200);
+        $response->assertStatus(204);
     }
 
     /**
@@ -154,11 +154,11 @@ class SlashCommandTest extends TestCase
             'user_name'=> 'admin2',
             'command'=> '',
             'text'=> 'delete unknownChannelId',
-            'response_url'=> '',
+            'response_url'=> 'https://hooks.slack.com/commands/1234/5678',
         ];
 
         $response = $this->post('/api/slack/slash-commands/twitch', $data);
 
-        $response->assertStatus(200);
+        $response->assertStatus(204);
     }
 }
