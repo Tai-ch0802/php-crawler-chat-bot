@@ -30,7 +30,6 @@ class TwitchDelete implements SlashCommandsInterface
     {
         $channelName = $this->command[1] ?? null;
 
-        //TODO use Trait
         if (null === $channelName) {
             return $this->invalidTyping();
         }

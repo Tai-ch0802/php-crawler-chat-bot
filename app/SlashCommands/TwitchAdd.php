@@ -31,17 +31,9 @@ class TwitchAdd implements SlashCommandsInterface
         $presenterName = $this->command[1] ?? null;
         $channelName = $this->command[2] ?? null;
 
-        if (in_array(
-            null,
-            [
-                $presenterName,
-                $channelName
-            ],
-            true
-        )) {
+        if (in_array(null, [$presenterName, $channelName], true)) {
             return $this->invalidTyping();
         }
-
 
         $fields = $this->twitchService->buildNewSubscription($presenterName, $channelName, $this->operator);
         return $this->slackService->buildSlashCommandResponse(
