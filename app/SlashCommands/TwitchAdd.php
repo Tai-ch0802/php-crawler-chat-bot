@@ -28,14 +28,17 @@ class TwitchAdd implements SlashCommandsInterface
 
     public function buildReply()
     {
-        $presenterName = $this->command[1] ?? null;
-        $channelName = $this->command[2] ?? null;
+        $channelName = $this->command[1] ?? null;
 
-        if (in_array(null, [$presenterName, $channelName], true)) {
+        if (null === $channelName) {
             return $this->invalidTyping();
         }
 
-        $fields = $this->twitchService->buildNewSubscription($presenterName, $channelName, $this->operator);
+        $fields = $this->twitchService->buildNewSubscription($channelName, $this->operator);
+        if (null === $fields) {
+            return $this->noExistTarget();
+        }
+
         return $this->slackService->buildSlashCommandResponse(
             '有新實況主納入追蹤名單！',
             '請參考以下資訊',

@@ -31,12 +31,20 @@ class TwitchDefault implements SlashCommandsInterface
                 'value' => '查看現在已經在追蹤的實況主名單',
             ],
             [
-                'title' => '/twitch add <實況主名稱> <實況主頻道id>',
-                'value' => "新增追蹤實況主\n舉例：/twitch add 小熊 yuniko0720",
+                'title' => '/twitch add <實況主頻道id>',
+                'value' => implode(PHP_EOL, [
+                    '新增追蹤實況主',
+                    '舉例：小熊的實況網址為https://www.twitch.tv/yuniko0720',
+                    '所以輸入：/twitch add yuniko0720',
+                ]),
             ],
             [
                 'title' => '/twitch delete <實況主頻道id>',
-                'value' => "刪除追蹤對象\n舉例：/twitch delete yuniko0720",
+                'value' => implode(PHP_EOL, [
+                    '刪除追蹤對象',
+                    '舉例：小熊的實況網址為https://www.twitch.tv/yuniko0720',
+                    '所以輸入：/twitch delete yuniko0720',
+                ]),
             ],
         ];
         return $this->slackService->buildSlashCommandResponse(

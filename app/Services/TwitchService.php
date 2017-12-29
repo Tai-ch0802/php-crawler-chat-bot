@@ -73,19 +73,21 @@ class TwitchService
     }
 
     /**
-     * @param string $presenterName
      * @param string $channelName
      * @param SlackMember $updater
-     * @return array
+     * @return array|null
      */
-    public function buildNewSubscription(string $presenterName, string $channelName, SlackMember $updater): array
+    public function buildNewSubscription(string $channelName, SlackMember $updater): ?array
     {
-        //TODO verify the endpoint
+        $broadcaster = $this->getBroadcaster($channelName);
+        if (null === $broadcaster) {
+            return null;
+        }
 
         //FIXME use repository(?)
         $twitch = new Twitch();
         $twitch->channel_name = $channelName;
-        $twitch->name = $presenterName;
+        $twitch->name = $broadcaster['display_name'];
         $twitch->created_by = $updater->id;
         $twitch->updated_by = $updater->id;
         $twitch->save();

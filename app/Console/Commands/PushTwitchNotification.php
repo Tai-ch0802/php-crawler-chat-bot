@@ -73,25 +73,25 @@ class PushTwitchNotification extends Command
                 $this->twitchService->getLiveStreams($broadcast)->getBody()->getContents(),
                 true
             );
-            if (!empty($response['data'])) {
-                $stream = array_first($response['data']);
-                if (!$this->isWithinTenMinutesAgo($stream['started_at'])) {
-                    return null;
-                }
-
-                $broadcaster = $this->twitchService->getBroadcaster($broadcast);
-
-                //TODO GET picture from another api
-                return [
-                    'authorName' => $broadcaster['display_name'],
-                    'authorIcon' => $broadcaster['profile_image_url'] ?? 'Unknown',
-                    'label' => $stream['title'],
-                    'directUri' => $this->baseUrl . $broadcast,
-                    'text' => "當前觀看人數: {$stream['viewer_count']}\n總觀看次數: {$broadcaster['view_count']}",
-                    'imagePath' => $broadcaster['offline_image_url'] ?? 'Unknown',
-                ];
+            if (empty($response['data'])) {
+                return null;
             }
-            return null;
+
+            $stream = array_first($response['data']);
+            if (!$this->isWithinTenMinutesAgo($stream['started_at'])) {
+                return null;
+            }
+
+            $broadcaster = $this->twitchService->getBroadcaster($broadcast);
+
+            return [
+                'authorName' => $broadcaster['display_name'],
+                'authorIcon' => $broadcaster['profile_image_url'] ?? 'Unknown',
+                'label' => $stream['title'],
+                'directUri' => $this->baseUrl . $broadcast,
+                'text' => "當前觀看人數: {$stream['viewer_count']}\n總觀看次數: {$broadcaster['view_count']}",
+                'imagePath' => $broadcaster['offline_image_url'] ?? 'Unknown',
+            ];
         }, $broadcastList);
 
         $targets = array_filter($targets, function ($d) {
@@ -121,5 +121,4 @@ class PushTwitchNotification extends Command
         }
         return false;
     }
-
 }
