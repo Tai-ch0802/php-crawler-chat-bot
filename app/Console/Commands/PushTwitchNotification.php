@@ -36,6 +36,8 @@ class PushTwitchNotification extends Command
     /** @var SlackService  */
     private $slackService;
 
+    private $baseUrl;
+
     /**
      * PushTwitchNotification constructor.
      * @param SlackService $slackService
@@ -51,6 +53,7 @@ class PushTwitchNotification extends Command
         $this->twitchService = $twitchService;
         $this->lineBotService = $lineBotService;
         $this->slackService = $slackService;
+        $this->baseUrl = config('services.url.twitch');
     }
 
     /**
@@ -70,20 +73,22 @@ class PushTwitchNotification extends Command
                 $this->twitchService->getLiveStreams($broadcast)->getBody()->getContents(),
                 true
             );
-            if (!empty($response['streams'])) {
-                $stream = array_first($response['streams']);
-                if (!$this->isWithinTenMinutesAgo($stream['created_at'])) {
+            if (!empty($response['data'])) {
+                $stream = array_first($response['data']);
+                if (!$this->isWithinTenMinutesAgo($stream['started_at'])) {
                     return null;
                 }
 
-                $channel = $stream['channel'];
+                $broadcaster = $this->twitchService->getBroadcaster($broadcast);
+
+                //TODO GET picture from another api
                 return [
-                    'authorName' => $channel['display_name'],
-                    'authorIcon' =>  $channel['logo'],
-                    'label' => $channel['status'],
-                    'directUri' => $channel['url'],
-                    'text' => "當前觀看數量: {$stream['viewers']}\n總觀看次數: {$channel['views']}",
-                    'imagePath' => $channel['video_banner'],
+                    'authorName' => $broadcaster['display_name'],
+                    'authorIcon' => $broadcaster['profile_image_url'] ?? 'Unknown',
+                    'label' => $stream['title'],
+                    'directUri' => $this->baseUrl . $broadcast,
+                    'text' => "當前觀看人數: {$stream['viewer_count']}\n總觀看次數: {$broadcaster['view_count']}",
+                    'imagePath' => $broadcaster['offline_image_url'] ?? 'Unknown',
                 ];
             }
             return null;
@@ -116,4 +121,5 @@ class PushTwitchNotification extends Command
         }
         return false;
     }
+
 }

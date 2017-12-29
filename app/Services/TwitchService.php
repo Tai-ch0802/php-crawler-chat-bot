@@ -30,7 +30,24 @@ class TwitchService
      */
     public function getLiveStreams(string $channel): ResponseInterface
     {
-        return $this->client->get("/kraken/streams/?channel={$channel}");
+        return $this->client->get("/helix/streams/?user_login={$channel}");
+    }
+
+    /**
+     * @param string $channel
+     * @return array|null
+     */
+    public function getBroadcaster(string $channel): ?array
+    {
+        $response = json_decode(
+            $this->client->get("/helix/users/?login={$channel}")->getBody()->getContents(),
+            true
+        );
+
+        if (empty($response['data'])) {
+            return null;
+        }
+        return array_first($response['data']);
     }
 
     /**
