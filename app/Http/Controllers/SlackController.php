@@ -26,7 +26,7 @@ class SlackController extends Controller
         $async->then(function ($response) {
             echo 'Got a response! ' . $response->getStatusCode();
         });
-
+        sleep(5);
         return response()->json($response);
     }
 }
