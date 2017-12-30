@@ -26,11 +26,11 @@ class SlackController extends Controller
             'headers' => ['content-type' => 'application/json']
         ]);
         
-        $async = $client->request(
+        $client->request(
             'POST',
             $request->input('response_url'),
             ['body' => json_encode($response)]
-        )->getBody()->getContents();
+        );
         
         return;
     }
