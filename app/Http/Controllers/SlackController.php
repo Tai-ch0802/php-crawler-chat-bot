@@ -21,14 +21,12 @@ class SlackController extends Controller
 
         $response = $twitchService->replySlashCommand($text, $operator);
 
-        if (empty($request->input('response_url'))) {
-            return response()->json($response);
-        }
-        $client = new Client([
-            'headers' => [
-                'Content-Type' => 'application/json'
-            ]]);
+        $client = new Client();
+        $async = $client->requestAsync('POST', $request->input('response_url'), $response);
+        $async->then(function ($response) {
+            echo 'Got a response! ' . $response->getStatusCode();
+        });
 
-        $client->post($request->input('response_url'), $response);
+        return response()->json($response);
     }
 }
