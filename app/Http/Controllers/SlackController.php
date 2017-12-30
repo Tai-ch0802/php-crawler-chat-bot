@@ -22,17 +22,26 @@ class SlackController extends Controller
 
         $response = $twitchService->replySlashCommand($text, $operator);
 
-        $client = new Client();
-        
-        $client->request(
-            'POST',
-            $request->input('response_url'),
-            [
-                'headers' => ['content-type' => 'application/json'],
-                'body' => json_encode($response),
-            ]
-        );
-        
-        return;
+        try {
+            $client = new Client();
+            $client->request(
+                'POST',
+                $request->input('response_url'),
+                [
+                    'headers' => ['content-type' => 'application/json'],
+                    'body' => json_encode($response),
+                ]
+            );
+        } catch (\Exception $exception) {
+            $data = var_export($exception, true);
+            $response = $slackService->buildSlashCommandResponse(
+                '訊息回送失敗！',
+                "```{$data}```",
+                [],
+                SlackService::SLASH_COMMAND_REPLY_PUBLIC,
+                SlackService::ATTACH_COLOR_RED
+            );
+            return response()->json($response);
+        }
     }
 }
