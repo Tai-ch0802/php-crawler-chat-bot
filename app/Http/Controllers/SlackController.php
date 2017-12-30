@@ -35,6 +35,6 @@ class SlackController extends Controller
             Log::info("Got a response! status:{$response->getStatusCode()} url:{$request->input('response_url')}");
         });
 
-        return response()->json([]);
+        return response()->json();
     }
 }
