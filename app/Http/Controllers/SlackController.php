@@ -28,6 +28,7 @@ class SlackController extends Controller
             'headers' => [
                 'Content-Type' => 'application/json'
             ]]);
-        $client->post($request->input('response_url'), json_encode($response));
+
+        $client->post($request->input('response_url'), $response);
     }
 }
