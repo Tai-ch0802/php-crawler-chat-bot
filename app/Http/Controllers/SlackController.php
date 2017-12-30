@@ -25,15 +25,13 @@ class SlackController extends Controller
         $client = new Client([
             'headers' => ['content-type' => 'application/json']
         ]);
-        echo ($request->input('response_url'));
-        $async = $client->requestAsync(
+        
+        $async = $client->request(
             'POST',
             $request->input('response_url'),
             ['body' => json_encode($response)]
-        );
-        $async->then(function ($response) use ($request) {
-            Log::info("Got a response! status:{$response->getStatusCode()} url:{$request->input('response_url')}");
-        });
+        )->getBody()->getContents();
+        var_dump($async);
 
         return response()->json();
     }
