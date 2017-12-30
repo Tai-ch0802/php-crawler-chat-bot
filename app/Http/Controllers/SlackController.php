@@ -3,7 +3,6 @@ namespace App\Http\Controllers;
 
 use App\Services\SlackService;
 use App\Services\TwitchService;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class SlackController extends Controller
@@ -21,10 +20,7 @@ class SlackController extends Controller
 
         $response = $twitchService->replySlashCommand($text, $operator);
 
-        if (empty($request->input('response_url'))) {
-            return response()->json($response);
-        }
-        $client = new Client();
-        $client->post($request->input('response_url'), $response);
+        $response['response_url'] = $request->input('response_url');
+        return response()->json($response);
     }
 }
