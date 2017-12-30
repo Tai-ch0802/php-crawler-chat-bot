@@ -32,8 +32,5 @@ class SlackController extends Controller
             ['body' => json_encode($response)]
         )->getBody()->getContents();
         
-        sleep(5);
-
-        return response()->json('');
     }
 }
