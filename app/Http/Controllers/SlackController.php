@@ -22,14 +22,15 @@ class SlackController extends Controller
 
         $response = $twitchService->replySlashCommand($text, $operator);
 
-        $client = new Client([
-            'headers' => ['content-type' => 'application/json']
-        ]);
+        $client = new Client();
         
         $client->request(
             'POST',
             $request->input('response_url'),
-            ['body' => json_encode($response)]
+            [
+                'headers' => ['content-type' => 'application/json'],
+                'body' => json_encode($response),
+            ]
         );
         
         return;
