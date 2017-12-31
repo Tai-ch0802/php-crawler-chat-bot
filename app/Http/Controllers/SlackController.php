@@ -1,11 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Services\ComicService;
 use App\Services\SlackService;
 use App\Services\TwitchService;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class SlackController extends Controller
 {
@@ -20,16 +20,48 @@ class SlackController extends Controller
         );
         $text = empty($text = $request->input('text', '')) ? 'help' : $text;
 
-        $response = $twitchService->replySlashCommand($text, $operator);
+        $data = $twitchService->replySlashCommand($text, $operator);
 
+        if (null !== $response = $this->sendResponseUrl($request->input('response_url'), $data)) {
+            return response()->json($response);
+        }
+    }
+
+    public function replySlashCommandComic(
+        ComicService $comicService,
+        SlackService $slackService,
+        Request $request
+    ) {
+        $operator = $slackService->getUpdater(
+            $request->input('user_id'),
+            $request->input('user_name')
+        );
+        $text = empty($text = $request->input('text', '')) ? 'help' : $text;
+
+        $data = $comicService->replySlashCommand($text, $operator);
+
+        if (null !== $response = $this->sendResponseUrl($request->input('response_url'), $data)) {
+            return response()->json($response);
+        }
+    }
+
+    /**
+     * @param string $endpoint
+     * @param array $data
+     * @return array|null
+     */
+    private function sendResponseUrl(string $endpoint, array $data): ?array
+    {
+        /** @var SlackService $slackService */
+        $slackService = app(SlackService::class);
         try {
             $client = new Client();
             $client->request(
                 'POST',
-                $request->input('response_url'),
+                $endpoint,
                 [
                     'headers' => ['content-type' => 'application/json'],
-                    'body' => json_encode($response),
+                    'body' => json_encode($data),
                 ]
             );
         } catch (\Exception $exception) {
@@ -41,7 +73,9 @@ class SlackController extends Controller
                 SlackService::SLASH_COMMAND_REPLY_PUBLIC,
                 SlackService::ATTACH_COLOR_RED
             );
-            return response()->json($response);
+            return $response;
         }
+
+        return null;
     }
 }
