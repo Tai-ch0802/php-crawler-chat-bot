@@ -19,8 +19,9 @@ class SlackController extends Controller
             $request->input('user_name')
         );
         $text = empty($text = $request->input('text', '')) ? 'help' : $text;
+        $payload = $request->input('payload', []);
 
-        $data = $twitchService->replySlashCommand($text, $operator);
+        $data = $twitchService->replySlashCommand($text, $payload, $operator);
 
         if (null !== $response = $this->sendResponseUrl($request->input('response_url'), $data)) {
             return response()->json($response);

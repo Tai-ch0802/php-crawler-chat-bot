@@ -147,10 +147,11 @@ class TwitchService
 
     /**
      * @param string $text
+     * @param array $payload
      * @param SlackMember $operator
      * @return array
      */
-    public function replySlashCommand(string $text, SlackMember $operator)
+    public function replySlashCommand(string $text, array $payload, SlackMember $operator)
     {
         $command = explode(' ', $text);
         $action = $command[0];
