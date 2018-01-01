@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\ComicService;
 use App\Services\LineBotService;
 use App\Services\SlackService;
 use App\Services\TwitchService;
@@ -35,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
         $this->lineBotServiceRegister();
         $this->slackServiceRegister();
         $this->twitchServiceRegister();
+        $this->comicServiceRegister();
     }
 
     private function lineBotRegister()
@@ -67,11 +69,19 @@ class AppServiceProvider extends ServiceProvider
     private function twitchServiceRegister()
     {
         $this->app->singleton(TwitchService::class, function () {
-            $client =  new Client([
+            $client = new Client([
                     'base_uri' => config('services.api.twitch'),
                     'headers' => ['Client-ID' => env('TWITCH_CLIENT_ID')],
                 ]);
             return new TwitchService($client, config('services.url.twitch'));
+        });
+    }
+
+    private function comicServiceRegister()
+    {
+        $this->app->singleton(ComicService::class, function () {
+            $endpoint = config('services.url.comic99770');
+            return new ComicService($endpoint);
         });
     }
 }
