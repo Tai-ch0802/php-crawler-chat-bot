@@ -35,7 +35,7 @@ class TwitchDelete implements SlashCommandsInterface
         }
         $fields = $this->twitchService->buildDeleteSubscription($channelName, $this->operator);
         if (null === $fields) {
-            return $this->slackService->buildSlashCommandResponse(
+            return $this->slackService->buildSlackMessages(
                 '本來就沒有追蹤這頻道！',
                 '',
                 [],
@@ -44,7 +44,7 @@ class TwitchDelete implements SlashCommandsInterface
             );
         }
 
-        return $this->slackService->buildSlashCommandResponse(
+        return $this->slackService->buildSlackMessages(
             '有人從追蹤名單裡被除名了！',
             '大家在看他最後一面吧！',
             $fields,

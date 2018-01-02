@@ -18,6 +18,8 @@ class SlackService
     /** @var SlackClient */
     private $client;
 
+    private $slackMessage;
+
     public function __construct(SlackClient $client)
     {
         $this->client = $client;
@@ -83,14 +85,14 @@ class SlackService
      * @param string $color
      * @return array
      */
-    public function buildSlashCommandResponse(
+    public function buildSlackMessages(
         string $title,
         string $text,
         array $fields = [],
         string $responseType = self::SLASH_COMMAND_REPLY_PRIVATE,
         string $color = self::ATTACH_COLOR_BLUE
     ): array {
-        return [
+        $this->slackMessage = [
             'response_type' => $responseType,
             'attachments' => [
                 [
@@ -104,6 +106,44 @@ class SlackService
                 ],
             ],
         ];
+        return $this->slackMessage;
+    }
+
+    /**
+     * @param int $currentPage
+     * @param int $totalPage
+     * @return mixed
+     * @throws \RuntimeException
+     */
+    public function attachPage(int $currentPage, int $totalPage)
+    {
+        if (empty($this->slackMessage)) {
+            throw new \RuntimeException('The slackMessage is empty');
+        }
+        $this->slackMessage['replace_original'] = true;
+        $clone = $this->slackMessage['attachments'];
+        $clone[0]['callback_id'] = 'splitPage';
+        $clone[0]['fallback'] = 'There is no data.';
+        if ($currentPage > 1) {
+            $clone[0]['actions'][] = [
+                'name' => 'page',
+                'text' => '上一頁',
+                'type' => 'button',
+                'style' => 'primary',
+                'value' => $currentPage - 1
+            ];
+        }
+        if ($currentPage !== $totalPage) {
+            $clone[0]['actions'][] = [
+                'name' => 'page',
+                'text' => '下一頁',
+                'type' => 'button',
+                'style' => 'primary',
+                'value' => $currentPage + 1
+            ];
+        }
+        $this->slackMessage['attachments'] = $clone;
+        return $this->slackMessage;
     }
 
     /**

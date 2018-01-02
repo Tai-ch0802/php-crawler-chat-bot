@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class SlackController extends Controller
 {
+    /**
+     * @param TwitchService $twitchService
+     * @param SlackService $slackService
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function replySlashCommandTwitch(
         TwitchService $twitchService,
         SlackService $slackService,
@@ -19,14 +25,24 @@ class SlackController extends Controller
             $request->input('user_name')
         );
         $text = empty($text = $request->input('text', '')) ? 'help' : $text;
+        $responseUrl = $request->input('response_url');
 
-        $data = $twitchService->replySlashCommand($text, $operator);
+        $payload = $request->input('payload', []);
+        $responseUrl = $payload['response_url'] ?? $responseUrl;
 
-        if (null !== $response = $this->sendResponseUrl($request->input('response_url'), $data)) {
+        $data = $twitchService->replySlashCommand($text, $payload, $operator);
+
+        if (null !== $response = $this->sendResponseUrl($responseUrl, $data)) {
             return response()->json($response);
         }
     }
 
+    /**
+     * @param ComicService $comicService
+     * @param SlackService $slackService
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function replySlashCommandComic(
         ComicService $comicService,
         SlackService $slackService,
@@ -37,10 +53,14 @@ class SlackController extends Controller
             $request->input('user_name')
         );
         $text = empty($text = $request->input('text', '')) ? 'help' : $text;
+        $responseUrl = $request->input('response_url');
 
-        $data = $comicService->replySlashCommand($text, $operator);
+        $payload = $request->input('payload', []);
+        $responseUrl = $payload['response_url'] ?? $responseUrl;
 
-        if (null !== $response = $this->sendResponseUrl($request->input('response_url'), $data)) {
+        $data = $comicService->replySlashCommand($text, $payload, $operator);
+
+        if (null !== $response = $this->sendResponseUrl($responseUrl, $data)) {
             return response()->json($response);
         }
     }
@@ -66,7 +86,7 @@ class SlackController extends Controller
             );
         } catch (\Exception $exception) {
             $data = var_export($exception, true);
-            $response = $slackService->buildSlashCommandResponse(
+            $response = $slackService->buildSlackMessages(
                 '訊息回送失敗！',
                 "```{$data}```",
                 [],

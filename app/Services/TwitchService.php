@@ -51,14 +51,16 @@ class TwitchService
     }
 
     /**
+     * @param Collection $collection Collection of twitch
+     * @param int $currentPage
+     * @param int $perPage
      * @return Collection
      */
-    public function buildFollowList(): Collection
+    public function buildFollowList(Collection $collection, int $currentPage = 1, int $perPage = 4): Collection
     {
-        //FIXME use repository(?)
-        $collection = Twitch::all();
+        $target = $collection->forPage($currentPage, $perPage);
 
-        $collection->transform(function (Twitch $item) {
+        $target->transform(function (Twitch $item) {
             return [
                 'title' => $item->name,
                 'value' => implode(PHP_EOL, [
@@ -69,7 +71,7 @@ class TwitchService
             ];
         });
 
-        return $collection;
+        return $target;
     }
 
     /**
@@ -147,12 +149,14 @@ class TwitchService
 
     /**
      * @param string $text
+     * @param array $payload
      * @param SlackMember $operator
      * @return array
      */
-    public function replySlashCommand(string $text, SlackMember $operator)
+    public function replySlashCommand(string $text, array $payload, SlackMember $operator)
     {
         $command = explode(' ', $text);
+        $command['payload'] = $payload;
         $action = $command[0];
 
         $actions = [

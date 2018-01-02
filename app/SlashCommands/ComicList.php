@@ -29,11 +29,19 @@ class ComicList implements SlashCommandsInterface
 
     public function buildReply()
     {
-        $fields = $this->comicService->buildFollowList();
-        return $this->slackService->buildSlashCommandResponse(
+        $payload = $this->command['payload'];
+        $currentPage = $payload['page'] ?? 1;
+        $perPage = 4;
+
+        $collection = $this->comicService->getAll();
+        $fields = $this->comicService->buildFollowList($collection, $currentPage, $perPage);
+        $totalPage = $collection->chunk($perPage)->count();
+
+        $this->slackService->buildSlackMessages(
             '漫畫追蹤名單',
-            "目前共有 {$fields->count()} 篇漫畫追蹤中",
+            "目前共有 {$fields->count()} 篇漫畫追蹤中，當前第 {$currentPage} 頁，共 {$totalPage} 頁",
             $fields->toArray()
         );
+        return $this->slackService->attachPage($currentPage, $totalPage);
     }
 }

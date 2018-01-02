@@ -20,14 +20,21 @@ class ComicService
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getAll()
+    {
+        return Comic::all();
+    }
+
+    /**
      * @return Collection
      */
-    public function buildFollowList(): Collection
+    public function buildFollowList(Collection $collection, int $currentPage = 1, int $perPage = 4): Collection
     {
-        //FIXME use repository(?)
-        $collection = Comic::all();
+        $target = $collection->forPage($currentPage, $perPage);
 
-        $collection->transform(function (Comic $item) {
+        $target->transform(function (Comic $item) {
             return [
                 'title' => $item->name,
                 'value' => implode(PHP_EOL, [
@@ -38,7 +45,7 @@ class ComicService
             ];
         });
 
-        return $collection;
+        return $target;
     }
 
     /**
@@ -128,9 +135,10 @@ class ComicService
      * @param SlackMember $operator
      * @return array
      */
-    public function replySlashCommand(string $text, SlackMember $operator)
+    public function replySlashCommand(string $text, array $payload, SlackMember $operator): array
     {
         $command = explode(' ', $text);
+        $command['payload'] = $payload;
         $action = $command[0];
 
         $actions = [

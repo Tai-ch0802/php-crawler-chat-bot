@@ -36,7 +36,7 @@ class ComicDelete implements SlashCommandsInterface
         }
         $fields = $this->comicService->buildDeleteSubscription($comicId, $this->operator);
         if (null === $fields) {
-            return $this->slackService->buildSlashCommandResponse(
+            return $this->slackService->buildSlackMessages(
                 '本來就沒有追蹤這漫畫！',
                 '',
                 [],
@@ -45,7 +45,7 @@ class ComicDelete implements SlashCommandsInterface
             );
         }
 
-        return $this->slackService->buildSlashCommandResponse(
+        return $this->slackService->buildSlackMessages(
             '有人從追蹤名單裡被除名了！',
             '大家在看他最後一面吧！',
             $fields,
