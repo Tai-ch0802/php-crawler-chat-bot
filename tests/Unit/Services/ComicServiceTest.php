@@ -24,7 +24,8 @@ class ComicServiceTest extends TestCase
 
     public function testBuildFollowList()
     {
-        $response = $this->comicService->buildFollowList();
+        $collection = $this->comicService->getAll();
+        $response = $this->comicService->buildFollowList($collection);
 
         $this->assertNotEmpty($response->toArray());
     }
