@@ -22,7 +22,9 @@ class CheckSlashToken
             config('services.slack.slash.comic'),
             config('services.slack.slash.animation'),
         ];
-        if (!in_array($request->token, $tokens, true)) {
+
+        $token = $request->input('token', $request->input('payload.token'));
+        if (!in_array($token, $tokens, true)) {
             $data = [
                 'text' => 'Invalid Token!',
             ];
