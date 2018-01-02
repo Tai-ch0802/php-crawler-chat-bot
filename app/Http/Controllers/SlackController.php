@@ -27,9 +27,9 @@ class SlackController extends Controller
         $text = empty($text = $request->input('text', '')) ? 'help' : $text;
         $responseUrl = $request->input('response_url');
 
-        $payload = $request->input('payload', []);
-        if($payload !== []) {
-        dd($payload);
+        $payload = $request->input('payload', '');
+        if($payload !== '') {
+        var_dump($payload);
         }
         $responseUrl = $payload['response_url'] ?? $responseUrl;
 
