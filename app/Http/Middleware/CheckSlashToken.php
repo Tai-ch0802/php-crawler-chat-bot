@@ -25,8 +25,8 @@ class CheckSlashToken
 
         $token = $request->input('token');
         if (null === $token) {
-            $token = json_decode($request->payload, true)['token'];
-            $message = var_export($request->input('payload'));
+            $token = $request->input('payload');
+            $message = var_dump($request->input('payload'));
         }
         if (!in_array($token, $tokens, true)) {
             $data = [
