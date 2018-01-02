@@ -29,7 +29,7 @@ class TwitchList implements SlashCommandsInterface
     public function buildReply()
     {
         $payload = $this->command['payload'];
-        $currentPage = $payload['page'] ?? 1;
+        $currentPage = $payload['actions'][0]['value'] ?? 1;
         $perPage = 4;
 
         $collection = $this->twitchService->getAll();
