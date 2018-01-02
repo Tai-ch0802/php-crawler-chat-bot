@@ -23,10 +23,14 @@ class CheckSlashToken
             config('services.slack.slash.animation'),
         ];
 
-        $token = $request->input('token', $request->input('payload.token'));
+        $token = $request->input('token');
+        if (null === $token) {
+            $token = $request->input('payload');
+            $message = var_export($request->input('payload'));
+        }
         if (!in_array($token, $tokens, true)) {
             $data = [
-                'text' => "Invalid Token!  Token: {$token}",
+                'text' => "Invalid Token!  Token: {$token} Message: {$message}",
             ];
             return response()->json($data)->setStatusCode(200);
         }
