@@ -63,7 +63,7 @@ class SlackController extends Controller
         SlackService $slackService,
         Request $request
     ) {
-        $payload = json_decode($request->input('payload'));
+        $payload = json_decode($request->input('payload'), true);
         if (null === $payload) {
             //TODO Throw Exception
         }
