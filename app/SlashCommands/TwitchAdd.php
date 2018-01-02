@@ -39,7 +39,7 @@ class TwitchAdd implements SlashCommandsInterface
             return $this->noExistTarget();
         }
 
-        return $this->slackService->buildSlashCommandResponse(
+        return $this->slackService->buildSlackMessages(
             '有新實況主納入追蹤名單！',
             '請參考以下資訊',
             $fields,

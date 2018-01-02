@@ -47,7 +47,7 @@ class TwitchDefault implements SlashCommandsInterface
                 ]),
             ],
         ];
-        return $this->slackService->buildSlashCommandResponse(
+        return $this->slackService->buildSlackMessages(
             'Twitch支援指令清單',
             '你可以輸入以下指令',
             $fields

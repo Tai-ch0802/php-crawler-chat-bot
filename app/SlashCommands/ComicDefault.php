@@ -47,7 +47,7 @@ class ComicDefault implements SlashCommandsInterface
                 ]),
             ],
         ];
-        return $this->slackService->buildSlashCommandResponse(
+        return $this->slackService->buildSlackMessages(
             '漫畫支援指令清單',
             '你可以輸入以下指令',
             $fields

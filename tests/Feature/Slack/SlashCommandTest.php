@@ -243,7 +243,7 @@ class SlashCommandTest extends TestCase
             'user_id'=> 'admin',
             'user_name'=> 'admin',
             'command'=> '',
-            'text'=> 'add test testChannelId',
+            'text'=> 'add 9527',
             'response_url'=> 'https://hooks.slack.com/services/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',
         ];
 

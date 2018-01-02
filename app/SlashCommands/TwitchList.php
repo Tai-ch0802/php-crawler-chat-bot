@@ -28,11 +28,20 @@ class TwitchList implements SlashCommandsInterface
 
     public function buildReply()
     {
-        $fields = $this->twitchService->buildFollowList();
-        return $this->slackService->buildSlashCommandResponse(
+        $payload = $this->command['payload'];
+        $currentPage = $payload['page'] ?? 1;
+        $perPage = 4;
+
+        $collection = $this->twitchService->getAll();
+        $fields = $this->twitchService->buildFollowList($collection, $currentPage, $perPage);
+        $totalPage = $collection->chunk($perPage)->count();
+
+
+        $this->slackService->buildSlackMessages(
             'Twitch追蹤名單',
-            "目前共有 {$fields->count()} 位實況主追蹤中",
+            "目前共有 {$collection->count()} 位實況主追蹤中，當前第 {$currentPage} 頁，共 {$totalPage} 頁",
             $fields->toArray()
         );
+        return $this->slackService->attachPage($currentPage, $totalPage);
     }
 }
