@@ -26,9 +26,9 @@ class CheckSlashToken
         $token = $request->input('token', $request->input('payload.token'));
         if (!in_array($token, $tokens, true)) {
             $data = [
-                'text' => 'Invalid Token!',
+                'text' => "Invalid Token!  Token: {$token}",
             ];
-            return response()->json($data)->setStatusCode(401);
+            return response()->json($data)->setStatusCode(200);
         }
         return $next($request);
     }
