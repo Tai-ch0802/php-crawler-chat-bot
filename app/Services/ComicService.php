@@ -133,9 +133,10 @@ class ComicService
     /**
      * @param string $text
      * @param SlackMember $operator
+     * @param array $payload
      * @return array
      */
-    public function replySlashCommand(string $text, array $payload, SlackMember $operator): array
+    public function replySlashCommand(string $text, SlackMember $operator, array $payload = []): array
     {
         $command = explode(' ', $text);
         $command['payload'] = $payload;

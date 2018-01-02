@@ -42,6 +42,6 @@ class ComicList implements SlashCommandsInterface
             "目前共有 {$fields->count()} 篇漫畫追蹤中，當前第 {$currentPage} 頁，共 {$totalPage} 頁",
             $fields->toArray()
         );
-        return $this->slackService->attachPage($currentPage, $totalPage);
+        return $this->slackService->attachPage($currentPage, $totalPage, ComicService::class);
     }
 }

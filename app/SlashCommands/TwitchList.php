@@ -42,6 +42,6 @@ class TwitchList implements SlashCommandsInterface
             "目前共有 {$collection->count()} 位實況主追蹤中，當前第 {$currentPage} 頁，共 {$totalPage} 頁",
             $fields->toArray()
         );
-        return $this->slackService->attachPage($currentPage, $totalPage);
+        return $this->slackService->attachPage($currentPage, $totalPage, TwitchService::class);
     }
 }

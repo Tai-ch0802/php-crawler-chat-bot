@@ -20,25 +20,14 @@ class SlackController extends Controller
         SlackService $slackService,
         Request $request
     ) {
-        $payload = json_decode($request->input('payload'), true);
-        if (null === $payload) {
-            $payload = [];
-            $operator = $slackService->getUpdater(
-                $request->input('user_id'),
-                $request->input('user_name')
-            );
-            $text = empty($text = $request->input('text', '')) ? 'help' : $text;
-            $responseUrl = $request->input('response_url');
-        } else {
-            $operator = $slackService->getUpdater(
-                $payload['user']['id'],
-                $payload['user']['name']
-            );
-            $text = 'list';
-            $responseUrl = $payload['response_url'];
-        }
+        $operator = $slackService->getUpdater(
+            $request->input('user_id'),
+            $request->input('user_name')
+        );
+        $text = empty($text = $request->input('text', '')) ? 'help' : $text;
+        $responseUrl = $request->input('response_url');
 
-        $data = $twitchService->replySlashCommand($text, $payload, $operator);
+        $data = $twitchService->replySlashCommand($text, $operator);
 
         if (null !== $response = $this->sendResponseUrl($responseUrl, $data)) {
             return response()->json($response);
@@ -56,24 +45,37 @@ class SlackController extends Controller
         SlackService $slackService,
         Request $request
     ) {
-        $payload = json_decode($request->input('payload'), true);
-        if (null === $payload) {
-            $payload = [];
-            $operator = $slackService->getUpdater(
-                $request->input('user_id'),
-                $request->input('user_name')
-            );
-            $text = empty($text = $request->input('text', '')) ? 'help' : $text;
-            $responseUrl = $request->input('response_url');
-        } else {
-            $operator = $slackService->getUpdater(
-                $payload['user']['id'],
-                $payload['user']['name']
-            );
-            $text = 'list';
-            $responseUrl = $payload['response_url'];
+        $operator = $slackService->getUpdater(
+            $request->input('user_id'),
+            $request->input('user_name')
+        );
+        $text = empty($text = $request->input('text', '')) ? 'help' : $text;
+        $responseUrl = $request->input('response_url');
+
+        $data = $comicService->replySlashCommand($text, $operator);
+
+        if (null !== $response = $this->sendResponseUrl($responseUrl, $data)) {
+            return response()->json($response);
         }
-        $data = $comicService->replySlashCommand($text, $payload, $operator);
+    }
+
+    public function replyInteractiveSlashCommand(
+        SlackService $slackService,
+        Request $request
+    ) {
+        $payload = json_decode($request->input('payload'));
+        if (null === $payload) {
+            //TODO Throw Exception
+        }
+        $operator = $slackService->getUpdater(
+            $payload['user']['id'],
+            $payload['user']['name']
+        );
+        $command = explode(' ', $payload['callback_id']);
+        $text = $command[0];
+        $instance = $command[1];
+        $responseUrl = $payload['response_url'];
+        $data = app($instance)->replySlashCommand($text, $operator, $payload);
 
         if (null !== $response = $this->sendResponseUrl($responseUrl, $data)) {
             return response()->json($response);

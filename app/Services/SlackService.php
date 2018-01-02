@@ -115,14 +115,14 @@ class SlackService
      * @return mixed
      * @throws \RuntimeException
      */
-    public function attachPage(int $currentPage, int $totalPage)
+    public function attachPage(int $currentPage, int $totalPage, $serviceName)
     {
         if (empty($this->slackMessage)) {
             throw new \RuntimeException('The slackMessage is empty');
         }
         $this->slackMessage['replace_original'] = true;
         $clone = $this->slackMessage['attachments'];
-        $clone[0]['callback_id'] = 'splitPage';
+        $clone[0]['callback_id'] = 'list ' . $serviceName;
         $clone[0]['fallback'] = 'There is no data.';
         if ($currentPage > 1) {
             $clone[0]['actions'][] = [
