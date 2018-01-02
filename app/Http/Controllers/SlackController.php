@@ -28,9 +28,6 @@ class SlackController extends Controller
         $responseUrl = $request->input('response_url');
 
         $payload = $request->input('payload', '');
-        if($payload !== '') {
-        var_dump($payload);
-        }
         $responseUrl = $payload['response_url'] ?? $responseUrl;
 
         $data = $twitchService->replySlashCommand($text, $payload, $operator);
