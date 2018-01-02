@@ -22,6 +22,7 @@ class SlackController extends Controller
     ) {
         $payload = json_decode($request->input('payload'), true);
         if (null === $payload) {
+            $payload = [];
             $operator = $slackService->getUpdater(
                 $request->input('user_id'),
                 $request->input('user_name')
@@ -36,6 +37,7 @@ class SlackController extends Controller
             $text = 'list';
             $responseUrl = $payload['response_url'];
         }
+
         $data = $twitchService->replySlashCommand($text, $payload, $operator);
 
         if (null !== $response = $this->sendResponseUrl($responseUrl, $data)) {
@@ -56,6 +58,7 @@ class SlackController extends Controller
     ) {
         $payload = json_decode($request->input('payload'), true);
         if (null === $payload) {
+            $payload = [];
             $operator = $slackService->getUpdater(
                 $request->input('user_id'),
                 $request->input('user_name')
