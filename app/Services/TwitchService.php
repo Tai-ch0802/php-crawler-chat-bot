@@ -150,19 +150,36 @@ class TwitchService
     /**
      * @param string $text
      * @param SlackMember $operator
-     * @param array $payload
      * @return array
      */
-    public function replySlashCommand(string $text, SlackMember $operator, array $payload = [])
+    public function replySlashCommand(string $text, SlackMember $operator): array
     {
         $command = explode(' ', $text);
-        $command['payload'] = $payload;
-        $action = $command[0];
+        $action = array_first($command);
 
         $actions = [
             'list' => TwitchList::class,
             'add' => TwitchAdd::class,
             'delete' => TwitchDelete::class,
+        ];
+        $instance = array_get($actions, $action, TwitchDefault::class);
+
+        return Helper::toSlashCommand($instance, $command, $operator);
+    }
+
+    /**
+     * @param array $payload
+     * @param SlackMember $operator
+     * @return array
+     */
+    public function replyInteractiveSlashCommand(array $payload, SlackMember $operator): array
+    {
+        $command = explode(' ', $payload['callback_id']);
+        $command['payload'] = $payload;
+        $action = array_first($command);
+
+        $actions = [
+            'list' => TwitchList::class,
         ];
         $instance = array_get($actions, $action, TwitchDefault::class);
 
