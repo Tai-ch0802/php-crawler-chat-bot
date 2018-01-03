@@ -65,18 +65,17 @@ class SlackController extends Controller
     ) {
         $payload = json_decode($request->input('payload'), true);
         if (null === $payload) {
-            //TODO Throw Exception
             throw new \RuntimeException('payload is null!');
         }
         $operator = $slackService->getUpdater(
             $payload['user']['id'],
             $payload['user']['name']
         );
+
         $command = explode(' ', $payload['callback_id']);
-        $text = $command[0];
-        $instance = $command[1];
+        $instance = array_last($command);
         $responseUrl = $payload['response_url'];
-        $data = app($instance)->replySlashCommand($text, $operator, $payload);
+        $data = app($instance)->replyInteractiveSlashCommand($payload, $operator);
 
         if (null !== $response = $this->sendResponseUrl($responseUrl, $data)) {
             return response()->json($response);

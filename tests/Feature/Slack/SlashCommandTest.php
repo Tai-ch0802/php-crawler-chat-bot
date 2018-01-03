@@ -41,7 +41,7 @@ class SlashCommandTest extends TestCase
      */
     public function testReturn200WhenReplySlashCommandTwitchPart1()
     {
-        $token = config('services.slack.slash.twitch');
+        $token = config('services.slack.slash.secretary');
         if (empty($token)) {
             $this->markTestSkipped('none token');
         }
@@ -68,7 +68,7 @@ class SlashCommandTest extends TestCase
      */
     public function testReturn200WhenReplySlashCommandTwitchPart2()
     {
-        $token = config('services.slack.slash.twitch');
+        $token = config('services.slack.slash.secretary');
         if (empty($token)) {
             $this->markTestSkipped('none token');
         }
@@ -95,7 +95,7 @@ class SlashCommandTest extends TestCase
      */
     public function testReturn200WhenReplySlashCommandTwitchPart3()
     {
-        $token = config('services.slack.slash.twitch');
+        $token = config('services.slack.slash.secretary');
         if (empty($token)) {
             $this->markTestSkipped('none token');
         }
@@ -122,7 +122,7 @@ class SlashCommandTest extends TestCase
      */
     public function testReturn200WhenReplySlashCommandTwitchPart4()
     {
-        $token = config('services.slack.slash.twitch');
+        $token = config('services.slack.slash.secretary');
         if (empty($token)) {
             $this->markTestSkipped('none token');
         }
@@ -149,7 +149,7 @@ class SlashCommandTest extends TestCase
      */
     public function testReturn200WhenReplySlashCommandTwitchPart5()
     {
-        $token = config('services.slack.slash.twitch');
+        $token = config('services.slack.slash.secretary');
         if (empty($token)) {
             $this->markTestSkipped('none token');
         }
@@ -176,7 +176,7 @@ class SlashCommandTest extends TestCase
      */
     public function testReturn200WhenReplySlashCommandComicPart1()
     {
-        $token = config('services.slack.slash.comic');
+        $token = config('services.slack.slash.secretary');
         if (empty($token)) {
             $this->markTestSkipped('none token');
         }
@@ -203,7 +203,7 @@ class SlashCommandTest extends TestCase
      */
     public function testReturn200WhenReplySlashCommandComicPart2()
     {
-        $token = config('services.slack.slash.comic');
+        $token = config('services.slack.slash.secretary');
         if (empty($token)) {
             $this->markTestSkipped('none token');
         }
@@ -230,7 +230,7 @@ class SlashCommandTest extends TestCase
      */
     public function testReturn200WhenReplySlashCommandComicPart3()
     {
-        $token = config('services.slack.slash.comic');
+        $token = config('services.slack.slash.secretary');
         if (empty($token)) {
             $this->markTestSkipped('none token');
         }
@@ -257,7 +257,7 @@ class SlashCommandTest extends TestCase
      */
     public function testReturn200WhenReplySlashCommandComicPart4()
     {
-        $token = config('services.slack.slash.comic');
+        $token = config('services.slack.slash.secretary');
         if (empty($token)) {
             $this->markTestSkipped('none token');
         }
@@ -284,7 +284,7 @@ class SlashCommandTest extends TestCase
      */
     public function testReturn200WhenReplySlashCommandComicPart5()
     {
-        $token = config('services.slack.slash.comic');
+        $token = config('services.slack.slash.secretary');
         if (empty($token)) {
             $this->markTestSkipped('none token');
         }
