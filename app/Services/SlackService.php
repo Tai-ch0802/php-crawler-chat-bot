@@ -112,10 +112,10 @@ class SlackService
     /**
      * @param int $currentPage
      * @param int $totalPage
+     * @param string $serviceName
      * @return mixed
-     * @throws \RuntimeException
      */
-    public function attachPage(int $currentPage, int $totalPage, $serviceName)
+    public function attachPage(int $currentPage, int $totalPage, string $serviceName)
     {
         if (empty($this->slackMessage)) {
             throw new \RuntimeException('The slackMessage is empty');
