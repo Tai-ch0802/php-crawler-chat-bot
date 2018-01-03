@@ -66,6 +66,7 @@ class SlackController extends Controller
         $payload = json_decode($request->input('payload'), true);
         if (null === $payload) {
             //TODO Throw Exception
+            throw new \RuntimeException('payload is null!');
         }
         $operator = $slackService->getUpdater(
             $payload['user']['id'],
