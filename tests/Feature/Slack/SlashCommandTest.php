@@ -24,7 +24,7 @@ class SlashCommandTest extends TestCase
 
         $response = $this->post('/api/slack/slash-commands/twitch', $data);
 
-        $response->assertStatus(401);
+        $response->assertStatus(200);
     }
 
     public function testReturn401WhenReplySlashCommandComic()
@@ -33,7 +33,7 @@ class SlashCommandTest extends TestCase
 
         $response = $this->post('/api/slack/slash-commands/comic', $data);
 
-        $response->assertStatus(401);
+        $response->assertStatus(200);
     }
 
     /**
