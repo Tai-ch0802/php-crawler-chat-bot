@@ -10,7 +10,7 @@ trait SlashCommandsTrait
      */
     public function invalidTyping()
     {
-        return $this->slackService->buildSlashCommandResponse(
+        return $this->slackService->buildSlackMessages(
             '輸入指令錯誤',
             "請確認 `{$this->command[0]}` 指令格式",
             [],
@@ -24,7 +24,7 @@ trait SlashCommandsTrait
      */
     public function noExistTarget()
     {
-        return $this->slackService->buildSlashCommandResponse(
+        return $this->slackService->buildSlackMessages(
             '輸入對象代號不存在',
             "請確認新增對象 `{$this->command[1]}` 是否存在",
             [],
