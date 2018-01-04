@@ -63,7 +63,7 @@ class TwitchService
         $target->transform(function (Twitch $item) {
             return [
                 'title' => $item->name,
-                'value' => implode('\\n', [
+                'value' => implode(PHP_EOL, [
                     "實況網址： {$this->url}{$item->channel_name}",
                     "追蹤日期： {$item->created_at}",
                     "追蹤建立人： {$item->creator->user_name}",
@@ -83,7 +83,7 @@ class TwitchService
         return $collection->transform(function (Twitch $item) {
             return [
                 'text' => $item->name,
-                'value' => implode(PHP_EOL, [
+                'value' => implode('\\n', [
                     "*{$item->name}*",
                     "實況網址： {$this->url}{$item->channel_name}",
                     "追蹤日期： {$item->created_at}",
