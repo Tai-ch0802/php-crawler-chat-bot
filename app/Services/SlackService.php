@@ -168,6 +168,9 @@ class SlackService
             'fallback' => 'What?',
             'color' => self::ATTACH_COLOR_GREEN,
             'callback_id'  => 'filter_list ' . $serviceName,
+            'mrkdwn_in' => [
+                'text',
+            ],
             'actions' => [
                 [
                     'name' => 'filter',
