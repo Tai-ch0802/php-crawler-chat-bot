@@ -29,11 +29,15 @@ class TwitchList implements SlashCommandsInterface
     public function buildReply()
     {
         $payload = $this->command['payload'] ?? null;
-        $currentPage = $payload['actions'][0]['value'] ?? 1;
         $perPage = 4;
+        $currentPage = 1;
+        $actionData = '';
+
+        $this->getAttributesFromPayload($currentPage, $actionData, $payload);
 
         $collection = $this->twitchService->getAll();
         $fields = $this->twitchService->buildFollowList($collection, $currentPage, $perPage);
+        $option = $this->twitchService->buildFilterOption($collection);
         $totalPage = $collection->chunk($perPage)->count();
 
 
@@ -42,6 +46,28 @@ class TwitchList implements SlashCommandsInterface
             "目前共有 {$collection->count()} 位實況主追蹤中，當前第 {$currentPage} 頁，共 {$totalPage} 頁",
             $fields->toArray()
         );
-        return $this->slackService->attachPage($currentPage, $totalPage, TwitchService::class);
+
+        $this->slackService->attachPage($currentPage, $totalPage, TwitchService::class);
+        return $this->slackService->attachFilter($option, $actionData, TwitchService::class);
+    }
+
+    private function getAttributesFromPayload(int &$currentPage, string &$actionData, $payload = null)
+    {
+        if (null === $payload) {
+            return;
+        }
+
+        $actions = $payload['actions'];
+        foreach ($actions as $action) {
+            $actionName = $action['name'] ?? null;
+            switch ($actionName) {
+                case 'page':
+                    $currentPage = $action['value'];
+                    break;
+                case 'filter':
+                    $actionData = $action['value'];
+                    break;
+            }
+        }
     }
 }
