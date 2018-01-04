@@ -167,14 +167,14 @@ class SlackService
             'text' => $text,
             'fallback' => 'What?',
             'color' => self::ATTACH_COLOR_GREEN,
-            'callback_id'  => 'filter ' . $serviceName,
+            'callback_id'  => 'filter_list ' . $serviceName,
             'mrkdwn_in' => [
                 'text',
             ],
             'actions' => [
                 [
                     'name' => 'filter',
-                    'text' => 'Pick a game...',
+                    'text' => '選我選我',
                     'type' => 'select',
                     'options' => $options,
                 ]

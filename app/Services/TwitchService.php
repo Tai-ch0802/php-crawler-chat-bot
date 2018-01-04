@@ -199,6 +199,7 @@ class TwitchService
 
         $actions = [
             'list' => TwitchList::class,
+            'filter_list' => TwitchList::class,
         ];
         $instance = array_get($actions, $action, TwitchDefault::class);
 
