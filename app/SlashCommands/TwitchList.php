@@ -65,7 +65,7 @@ class TwitchList implements SlashCommandsInterface
                     $currentPage = $action['value'];
                     break;
                 case 'filter':
-                    $actionData = $action['value'];
+                    $actionData = $action['selected_options'][0]['value'];
                     break;
             }
         }

@@ -122,7 +122,7 @@ class SlackService
         }
         $this->slackMessage['replace_original'] = true;
         $clone = $this->slackMessage['attachments'];
-        $clone[0]['callback_id'] = 'list ' . $serviceName;
+        $clone[0]['callback_id'] = 'button_list ' . $serviceName;
         $clone[0]['fallback'] = 'There is no data.';
         if ($currentPage > 1) {
             $clone[0]['actions'][] = [

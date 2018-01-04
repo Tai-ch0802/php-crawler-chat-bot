@@ -162,7 +162,7 @@ class ComicService
         $action = array_first($command);
 
         $actions = [
-            'list' => ComicList::class,
+            'button_list' => ComicList::class,
         ];
         $instance = array_get($actions, $action, ComicDefault::class);
 
