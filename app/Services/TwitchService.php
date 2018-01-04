@@ -75,6 +75,25 @@ class TwitchService
     }
 
     /**
+     * @param Collection $collection
+     * @return array
+     */
+    public function buildFilterOption(Collection $collection): array
+    {
+        return $collection->transform(function (Twitch $item) {
+            return [
+                'text' => $item->name,
+                'value' => implode(PHP_EOL, [
+                    "*{$item->name}*",
+                    "實況網址： {$this->url}{$item->channel_name}",
+                    "追蹤日期： {$item->created_at}",
+                    "追蹤建立人： {$item->creator->user_name}",
+                ]),
+            ];
+        })->toArray();
+    }
+
+    /**
      * @param string $channelName
      * @param SlackMember $updater
      * @return array|null
