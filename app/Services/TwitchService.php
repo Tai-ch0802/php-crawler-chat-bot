@@ -83,11 +83,13 @@ class TwitchService
         return $collection->transform(function (Twitch $item) {
             return [
                 'text' => $item->name,
-                'value' => implode(PHP_EOL, [
-                    "*{$item->name}*",
-                    "實況網址： {$this->url}{$item->channel_name}",
-                    "追蹤日期： {$item->created_at}",
-                    "追蹤建立人： {$item->creator->user_name}",
+                'value' => json_encode([
+                    'title' => $item->name,
+                    'value' => implode(PHP_EOL, [
+                        "實況網址： {$this->url}{$item->channel_name}",
+                        "追蹤日期： {$item->created_at}",
+                        "追蹤建立人： {$item->creator->user_name}",
+                    ]),
                 ]),
             ];
         })->toArray();

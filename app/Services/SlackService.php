@@ -164,10 +164,11 @@ class SlackService
 
         $attachment = [
             'title' => '尋找你想看的',
-            'text' => $text,
+            'text' => '',
             'fallback' => 'What?',
             'color' => self::ATTACH_COLOR_GREEN,
             'callback_id'  => 'filter_list ' . $serviceName,
+            'fields' => [json_decode($text, true)],
             'mrkdwn_in' => [
                 'text',
             ],
