@@ -198,7 +198,7 @@ class TwitchService
         $action = array_first($command);
 
         $actions = [
-            'list' => TwitchList::class,
+            'button_list' => TwitchList::class,
             'filter_list' => TwitchList::class,
         ];
         $instance = array_get($actions, $action, TwitchDefault::class);
