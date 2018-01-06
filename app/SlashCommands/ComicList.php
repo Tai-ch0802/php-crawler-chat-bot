@@ -4,7 +4,6 @@ namespace App\SlashCommands;
 use App\Models\SlackMember;
 use App\Services\ComicService;
 use App\Services\SlackService;
-use App\Services\TwitchService;
 
 class ComicList implements SlashCommandsInterface
 {
@@ -47,7 +46,7 @@ class ComicList implements SlashCommandsInterface
             $fields->toArray()
         );
         $this->slackService->attachPage($currentPage, $totalPage, ComicService::class);
-        return $this->slackService->attachFilter($option, $actionData, TwitchService::class);
+        return $this->slackService->attachFilter($option, $actionData, ComicService::class);
     }
 
     private function getAttributesFromPayload(int &$currentPage, string &$actionData, $payload = null)
