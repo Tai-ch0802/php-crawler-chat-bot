@@ -49,6 +49,27 @@ class ComicService
     }
 
     /**
+     * @param Collection $collection
+     * @return array
+     */
+    public function buildFilterOption(Collection $collection): array
+    {
+        return $collection->transform(function (Comic $item) {
+            return [
+                'text' => $item->name,
+                'value' => json_encode([
+                    'title' => $item->name,
+                    'value' => implode(PHP_EOL, [
+                        "漫畫網址： {$this->url}{$item->comic_id}",
+                        "追蹤日期： {$item->created_at}",
+                        "追蹤建立人： {$item->creator->user_name}",
+                    ]),
+                ]),
+            ];
+        })->toArray();
+    }
+
+    /**
      * @param string $comicId
      * @param SlackMember $updater
      * @return array|null
@@ -163,6 +184,7 @@ class ComicService
 
         $actions = [
             'button_list' => ComicList::class,
+            'filter_list' => ComicList::class,
         ];
         $instance = array_get($actions, $action, ComicDefault::class);
 
