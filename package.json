@@ -11,11 +11,41 @@
     },
     "devDependencies": {
         "axios": "^0.16.2",
+        "babel-preset-react": "^6.23.0",
         "bootstrap-sass": "^3.3.7",
         "cross-env": "^5.0.1",
         "jquery": "^3.1.1",
         "laravel-mix": "^1.0",
         "lodash": "^4.17.4",
-        "vue": "^2.1.10"
+        "react": "^15.4.2",
+        "react-dom": "^15.4.2"
+    },
+    "name": "php-crawler-chat-bot",
+    "description": "\u81ea\u5df1\u73a9\u7684linebot \u6b64\u5c08\u6848\u5be6\u4f5c\u7684\u6771\u897f\u5f88\u96dc\u4e82 + LINE SDK + \u7c21\u6613\u722c\u87f2   + \u722c\u5df4\u54c8\u7576\u5b63\u65b0\u756a\u52d5\u6f2b   + \u722c\u8ffd\u8e64\u7684\u6f2b\u756b(99770) + Twitch API V5 + Slack API",
+    "version": "1.0.0",
+    "main": "index.js",
+    "directories": {
+        "test": "tests"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Tai-ch0802/php-crawler-chat-bot.git"
+    },
+    "author": "tai-ch0802",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Tai-ch0802/php-crawler-chat-bot/issues"
+    },
+    "homepage": "https://github.com/Tai-ch0802/php-crawler-chat-bot#readme",
+    "dependencies": {
+        "babel-core": "^6.26.0",
+        "babel-loader": "^7.1.2",
+        "babel-preset-env": "^1.6.1",
+        "babel-preset-es2015": "^6.24.1",
+        "babel-preset-react": "^6.24.1",
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0",
+        "webpack": "^3.10.0",
+        "webpack-dev-server": "^2.11.1"
     }
 }
