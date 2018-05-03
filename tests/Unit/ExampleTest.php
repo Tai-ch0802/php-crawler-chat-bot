@@ -2,8 +2,9 @@
 
 namespace Tests\Unit;
 
+use Taichuchu\AwsSms\Sms\Message;
+use Taichuchu\AwsSms\Sms\Sms;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ExampleTest extends TestCase
 {
@@ -15,5 +16,16 @@ class ExampleTest extends TestCase
     public function testBasicTest()
     {
         $this->assertTrue(true);
+    }
+
+    public function testAWS()
+    {
+        $this->markTestSkipped('OK!');
+        /** @var Sms $sms */
+        $sms = app(Sms::class);
+
+        $message = new Message('test from laravel 8=D');
+
+        $response = $sms->sendSms($message, '+886912345678');
     }
 }
