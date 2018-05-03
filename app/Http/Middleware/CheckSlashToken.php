@@ -18,16 +18,21 @@ class CheckSlashToken
     public function handle($request, Closure $next)
     {
         $tokens = [
-            config('services.slack.slash.twitch'),
-            config('services.slack.slash.comic'),
-            config('services.slack.slash.animation'),
+            config('services.slack.slash.secretary')
         ];
-        if (!in_array($request->token, $tokens, true)) {
-            $data = [
-                'text' => 'Invalid Token!',
-            ];
-            return response()->json($data)->setStatusCode(401);
+
+        $token = $request->input('token');
+        $payload = $request->input('payload');
+        if (null !== $payload) {
+            $token = json_decode($payload)->token;
         }
+        if (!in_array($token, $tokens, true)) {
+            $data = [
+                'text' => "Invalid Token!  Token: {$token}",
+            ];
+            return response()->json($data);
+        }
+
         return $next($request);
     }
 }

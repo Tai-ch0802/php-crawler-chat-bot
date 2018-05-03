@@ -18,6 +18,8 @@ class SlackService
     /** @var SlackClient */
     private $client;
 
+    private $slackMessage;
+
     public function __construct(SlackClient $client)
     {
         $this->client = $client;
@@ -83,14 +85,14 @@ class SlackService
      * @param string $color
      * @return array
      */
-    public function buildSlashCommandResponse(
+    public function buildSlackMessages(
         string $title,
         string $text,
         array $fields = [],
         string $responseType = self::SLASH_COMMAND_REPLY_PRIVATE,
         string $color = self::ATTACH_COLOR_BLUE
     ): array {
-        return [
+        $this->slackMessage = [
             'response_type' => $responseType,
             'attachments' => [
                 [
@@ -104,6 +106,85 @@ class SlackService
                 ],
             ],
         ];
+        return $this->slackMessage;
+    }
+
+    /**
+     * @param int $currentPage
+     * @param int $totalPage
+     * @param string $serviceName
+     * @return array
+     */
+    public function attachPage(int $currentPage, int $totalPage, string $serviceName): array
+    {
+        if (empty($this->slackMessage)) {
+            throw new \RuntimeException('The slackMessage is empty');
+        }
+        $this->slackMessage['replace_original'] = true;
+        $clone = $this->slackMessage['attachments'];
+        $clone[0]['callback_id'] = 'button_list ' . $serviceName;
+        $clone[0]['fallback'] = 'There is no data.';
+        if ($currentPage > 1) {
+            $clone[0]['actions'][] = [
+                'name' => 'page',
+                'text' => '上一頁',
+                'type' => 'button',
+                'style' => 'primary',
+                'value' => $currentPage - 1
+            ];
+        }
+        if ($currentPage !== $totalPage) {
+            $clone[0]['actions'][] = [
+                'name' => 'page',
+                'text' => '下一頁',
+                'type' => 'button',
+                'style' => 'primary',
+                'value' => $currentPage + 1
+            ];
+        }
+        $this->slackMessage['attachments'] = $clone;
+        return $this->slackMessage;
+    }
+
+    /**
+     * @param array $options
+     * @param $text
+     * @param string $serviceName
+     * @return array
+     */
+    public function attachFilter(array $options, string $text, string $serviceName): array
+    {
+        if (empty($this->slackMessage)) {
+            throw new \RuntimeException('The slackMessage is empty');
+        }
+        $this->slackMessage['replace_original'] = true;
+
+        $clone = $this->slackMessage['attachments'];
+
+
+        $attachment = [
+            'title' => '尋找你想看的',
+            'text' => '',
+            'fallback' => 'What?',
+            'color' => self::ATTACH_COLOR_GREEN,
+            'callback_id'  => 'filter_list ' . $serviceName,
+            'fields' => [json_decode($text, true)],
+            'mrkdwn_in' => [
+                'text',
+            ],
+            'actions' => [
+                [
+                    'name' => 'filter',
+                    'text' => '選我選我',
+                    'type' => 'select',
+                    'options' => $options,
+                ]
+            ]
+        ];
+        array_unshift($clone, $attachment);
+
+        $this->slackMessage['attachments'] = $clone;
+        return $this->slackMessage;
     }
 
     /**

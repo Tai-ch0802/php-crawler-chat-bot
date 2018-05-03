@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Helper;
+use App\Models\Comic;
+use App\Services\ComicService;
 use App\Services\CrawlerService;
 use App\Services\LineBotService;
 use App\Services\SlackService;
@@ -38,6 +40,9 @@ class PushComicNotification extends Command
     /** @var SlackService  */
     private $slackService;
 
+    /** @var ComicService  */
+    private $comicService;
+
     /**
      * @var array 追蹤的動畫清單
      */
@@ -55,13 +60,15 @@ class PushComicNotification extends Command
     public function __construct(
         CrawlerService $crawlerService,
         LineBotService $lineBotService,
-        SlackService $slackService
+        SlackService $slackService,
+        ComicService $comicService
     ) {
         parent::__construct();
         $this->path = config('services.url.comic99770');
         $this->crawlerService = $crawlerService;
         $this->lineBotService = $lineBotService;
         $this->slackService = $slackService;
+        $this->comicService = $comicService;
     }
 
     /**
@@ -71,13 +78,16 @@ class PushComicNotification extends Command
      */
     public function handle()
     {
+        $broadcastList = $this->comicService->getAll()->transform(function (Comic $comic) {
+            return $comic->comic_id;
+        })->toArray();
         $filterDays = [
             now()->format('Y-m-d'),
             now()->subDay()->format('Y-m-d'),
         ];
 
         $targets = [];
-        foreach (self::$comicList as $key => $value) {
+        foreach ($broadcastList as $key => $value) {
             $path = $this->path . $value;
             $crawler = $this->crawlerService->getOriginalData($path);
             $target = $this->crawlerService->getNewEpisodeFromComic99770($crawler);

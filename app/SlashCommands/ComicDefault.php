@@ -5,7 +5,7 @@ use App\Models\SlackMember;
 use App\Services\SlackService;
 use App\Services\TwitchService;
 
-class TwitchDefault implements SlashCommandsInterface
+class ComicDefault implements SlashCommandsInterface
 {
     use SlashCommandsTrait;
 
@@ -27,28 +27,28 @@ class TwitchDefault implements SlashCommandsInterface
     {
         $fields = [
             [
-                'title' => '/twitch list',
-                'value' => '查看現在已經在追蹤的實況主名單',
+                'title' => '/comic list',
+                'value' => '查看現在已經在追蹤的漫畫名單',
             ],
             [
-                'title' => '/twitch add <實況主頻道id>',
+                'title' => '/comic add <漫畫id>',
                 'value' => implode(PHP_EOL, [
-                    '新增追蹤實況主',
-                    '舉例：小熊的實況網址為https://www.twitch.tv/yuniko0720',
-                    '所以輸入：/twitch add yuniko0720',
+                    '新增追蹤漫畫',
+                    '舉例：監獄學園的漫畫網址為http://99770.hhxxee.com/comic/7688/',
+                    '所以輸入：/comic add 7688',
                 ]),
             ],
             [
-                'title' => '/twitch delete <實況主頻道id>',
+                'title' => '/comic delete <漫畫id>',
                 'value' => implode(PHP_EOL, [
-                    '刪除追蹤對象',
-                    '舉例：小熊的實況網址為https://www.twitch.tv/yuniko0720',
-                    '所以輸入：/twitch delete yuniko0720',
+                    '刪除追蹤漫畫',
+                    '舉例：監獄學園的漫畫網址為http://99770.hhxxee.com/comic/7688/',
+                    '所以輸入：/comic delete 7688',
                 ]),
             ],
         ];
         return $this->slackService->buildSlackMessages(
-            'Twitch支援指令清單',
+            '漫畫支援指令清單',
             '你可以輸入以下指令',
             $fields
         );

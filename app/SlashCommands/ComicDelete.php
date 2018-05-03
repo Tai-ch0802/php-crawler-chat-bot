@@ -2,10 +2,11 @@
 namespace App\SlashCommands;
 
 use App\Models\SlackMember;
+use App\Services\ComicService;
 use App\Services\SlackService;
 use App\Services\TwitchService;
 
-class TwitchDelete implements SlashCommandsInterface
+class ComicDelete implements SlashCommandsInterface
 {
     use SlashCommandsTrait;
 
@@ -13,8 +14,8 @@ class TwitchDelete implements SlashCommandsInterface
     /** @var SlackMember */
     private $operator;
 
-    /** @var TwitchService */
-    private $twitchService;
+    /** @var ComicService */
+    private $comicService;
     /** @var SlackService */
     private $slackService;
 
@@ -22,21 +23,21 @@ class TwitchDelete implements SlashCommandsInterface
     {
         $this->command = $command;
         $this->operator = $operator;
-        $this->twitchService = app(TwitchService::class);
+        $this->comicService = app(ComicService::class);
         $this->slackService = app(SlackService::class);
     }
 
     public function buildReply()
     {
-        $channelName = $this->command[1] ?? null;
+        $comicId = $this->command[1] ?? null;
 
-        if (null === $channelName) {
+        if (null === $comicId) {
             return $this->invalidTyping();
         }
-        $fields = $this->twitchService->buildDeleteSubscription($channelName, $this->operator);
+        $fields = $this->comicService->buildDeleteSubscription($comicId, $this->operator);
         if (null === $fields) {
             return $this->slackService->buildSlackMessages(
-                '本來就沒有追蹤這頻道！',
+                '本來就沒有追蹤這漫畫！',
                 '',
                 [],
                 SlackService::SLASH_COMMAND_REPLY_PRIVATE,

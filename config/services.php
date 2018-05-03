@@ -49,9 +49,7 @@ return [
         'channel' => '#general',
         'username' => 'Jarvis',
         'slash' => [
-            'twitch' => env('SLASH_TOKEN_TWITCH'),
-            'animation' => env('SLASH_TOKEN_ANIMATION'),
-            'comic' => env('SLASH_TOKEN_COMIC'),
+            'secretary' => env('SLASH_TOKEN_SECRETARY'),
         ],
     ],
 

@@ -2,10 +2,10 @@
 namespace App\SlashCommands;
 
 use App\Models\SlackMember;
+use App\Services\ComicService;
 use App\Services\SlackService;
-use App\Services\TwitchService;
 
-class TwitchAdd implements SlashCommandsInterface
+class ComicAdd implements SlashCommandsInterface
 {
     use SlashCommandsTrait;
 
@@ -13,8 +13,8 @@ class TwitchAdd implements SlashCommandsInterface
     /** @var SlackMember */
     private $operator;
 
-    /** @var TwitchService */
-    private $twitchService;
+    /** @var ComicService */
+    private $comicService;
     /** @var SlackService */
     private $slackService;
 
@@ -22,25 +22,25 @@ class TwitchAdd implements SlashCommandsInterface
     {
         $this->command = $command;
         $this->operator = $operator;
-        $this->twitchService = app(TwitchService::class);
+        $this->comicService = app(ComicService::class);
         $this->slackService = app(SlackService::class);
     }
 
     public function buildReply()
     {
-        $channelName = $this->command[1] ?? null;
+        $comicId = $this->command[1] ?? null;
 
-        if (null === $channelName) {
+        if (null === $comicId) {
             return $this->invalidTyping();
         }
 
-        $fields = $this->twitchService->buildNewSubscription($channelName, $this->operator);
+        $fields = $this->comicService->buildNewSubscription($comicId, $this->operator);
         if (null === $fields) {
             return $this->noExistTarget();
         }
 
         return $this->slackService->buildSlackMessages(
-            '有新實況主納入追蹤名單！',
+            '有新漫畫納入追蹤名單！',
             '請參考以下資訊',
             $fields,
             SlackService::SLASH_COMMAND_REPLY_PUBLIC,

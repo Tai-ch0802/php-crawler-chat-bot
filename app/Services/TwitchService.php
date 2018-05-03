@@ -51,14 +51,16 @@ class TwitchService
     }
 
     /**
+     * @param Collection $collection Collection of twitch
+     * @param int $currentPage
+     * @param int $perPage
      * @return Collection
      */
-    public function buildFollowList(): Collection
+    public function buildFollowList(Collection $collection, int $currentPage = 1, int $perPage = 4): Collection
     {
-        //FIXME use repository(?)
-        $collection = Twitch::all();
+        $target = $collection->forPage($currentPage, $perPage);
 
-        $collection->transform(function (Twitch $item) {
+        $target->transform(function (Twitch $item) {
             return [
                 'title' => $item->name,
                 'value' => implode(PHP_EOL, [
@@ -69,7 +71,28 @@ class TwitchService
             ];
         });
 
-        return $collection;
+        return $target;
+    }
+
+    /**
+     * @param Collection $collection
+     * @return array
+     */
+    public function buildFilterOption(Collection $collection): array
+    {
+        return $collection->transform(function (Twitch $item) {
+            return [
+                'text' => $item->name,
+                'value' => json_encode([
+                    'title' => $item->name,
+                    'value' => implode(PHP_EOL, [
+                        "實況網址： {$this->url}{$item->channel_name}",
+                        "追蹤日期： {$item->created_at}",
+                        "追蹤建立人： {$item->creator->user_name}",
+                    ]),
+                ]),
+            ];
+        })->toArray();
     }
 
     /**
@@ -150,15 +173,35 @@ class TwitchService
      * @param SlackMember $operator
      * @return array
      */
-    public function replySlashCommand(string $text, SlackMember $operator)
+    public function replySlashCommand(string $text, SlackMember $operator): array
     {
         $command = explode(' ', $text);
-        $action = $command[0];
+        $action = array_first($command);
 
         $actions = [
             'list' => TwitchList::class,
             'add' => TwitchAdd::class,
             'delete' => TwitchDelete::class,
+        ];
+        $instance = array_get($actions, $action, TwitchDefault::class);
+
+        return Helper::toSlashCommand($instance, $command, $operator);
+    }
+
+    /**
+     * @param array $payload
+     * @param SlackMember $operator
+     * @return array
+     */
+    public function replyInteractiveSlashCommand(array $payload, SlackMember $operator): array
+    {
+        $command = explode(' ', $payload['callback_id']);
+        $command['payload'] = $payload;
+        $action = array_first($command);
+
+        $actions = [
+            'button_list' => TwitchList::class,
+            'filter_list' => TwitchList::class,
         ];
         $instance = array_get($actions, $action, TwitchDefault::class);
 

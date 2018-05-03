@@ -2,10 +2,10 @@
 namespace App\SlashCommands;
 
 use App\Models\SlackMember;
+use App\Services\ComicService;
 use App\Services\SlackService;
-use App\Services\TwitchService;
 
-class TwitchList implements SlashCommandsInterface
+class ComicList implements SlashCommandsInterface
 {
     use SlashCommandsTrait;
 
@@ -13,8 +13,8 @@ class TwitchList implements SlashCommandsInterface
     /** @var SlackMember */
     private $operator;
 
-    /** @var TwitchService */
-    private $twitchService;
+    /** @var ComicService */
+    private $comicService;
     /** @var SlackService */
     private $slackService;
 
@@ -22,7 +22,7 @@ class TwitchList implements SlashCommandsInterface
     {
         $this->command = $command;
         $this->operator = $operator;
-        $this->twitchService = app(TwitchService::class);
+        $this->comicService = app(ComicService::class);
         $this->slackService = app(SlackService::class);
     }
 
@@ -35,20 +35,18 @@ class TwitchList implements SlashCommandsInterface
 
         $this->getAttributesFromPayload($currentPage, $actionData, $payload);
 
-        $collection = $this->twitchService->getAll();
-        $fields = $this->twitchService->buildFollowList($collection, $currentPage, $perPage);
-        $option = $this->twitchService->buildFilterOption($collection);
+        $collection = $this->comicService->getAll();
+        $fields = $this->comicService->buildFollowList($collection, $currentPage, $perPage);
+        $option = $this->comicService->buildFilterOption($collection);
         $totalPage = $collection->chunk($perPage)->count();
 
-
         $this->slackService->buildSlackMessages(
-            'Twitch追蹤名單',
-            "目前共有 {$collection->count()} 位實況主追蹤中，當前第 {$currentPage} 頁，共 {$totalPage} 頁",
+            '漫畫追蹤名單',
+            "目前共有 {$collection->count()} 篇漫畫追蹤中，當前第 {$currentPage} 頁，共 {$totalPage} 頁",
             $fields->toArray()
         );
-
-        $this->slackService->attachPage($currentPage, $totalPage, TwitchService::class);
-        return $this->slackService->attachFilter($option, $actionData, TwitchService::class);
+        $this->slackService->attachPage($currentPage, $totalPage, ComicService::class);
+        return $this->slackService->attachFilter($option, $actionData, ComicService::class);
     }
 
     private function getAttributesFromPayload(int &$currentPage, string &$actionData, $payload = null)
