@@ -12,14 +12,20 @@ env:
     DB_USERNAME: root
     DB_PASSWORD: password
 
-before_script:
-- composer install
-- cp .env.example .env
+cache:
+  directories:
+  - node_modules
+  - vendor
+
+
 before_install:
 - mysql -e "CREATE DATABASE testdatabase DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;"
 - mysql -e "SET PASSWORD = PASSWORD('password');"
+before_script:
+- cp .env.example .env
 install:
 - composer install
+- npm install
 script:
 - composer database
 - php vendor/bin/phpcs
