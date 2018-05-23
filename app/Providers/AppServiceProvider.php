@@ -38,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
         $this->slackServiceRegister();
         $this->twitchServiceRegister();
         $this->comicServiceRegister();
+        $this->bangumiServiceRegister();
     }
 
     private function lineBotRegister()

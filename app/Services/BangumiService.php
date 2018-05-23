@@ -13,18 +13,21 @@ class BangumiService
 
     }
 
-    private function buildToken($id)
+
+
+    /**
+     * 取得每日放送節目表
+     *
+     * @return array
+     */
+    public function getCalendar(): array
     {
         $client = new Client();
 
-        $data = [
-            'client_id' => $id,
-            'response_type' => 'code',
-            'redirect_uri' => 'https://php-crawler-chat-bot.herokuapp.com/',
-        ];
+        $response = $client->get('https://api.bgm.tv/calendar');
 
-        $response = $client->get('https://bgm.tv/oauth/authorize', $data);
+        $data = $response->getBody()->getContents();
 
-        dd($response);
+        return json_decode($data, true);
     }
 }
