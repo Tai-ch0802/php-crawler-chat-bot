@@ -4,6 +4,7 @@ php:
 sudo: true
 services:
   - mysql
+  - redis-server
 env:
   global:
     DB_HOST: 127.0.0.1

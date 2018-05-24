@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\BangumiService;
 use App\Services\ComicService;
 use App\Services\LineBotService;
 use App\Services\SlackService;
@@ -37,6 +38,7 @@ class AppServiceProvider extends ServiceProvider
         $this->slackServiceRegister();
         $this->twitchServiceRegister();
         $this->comicServiceRegister();
+        $this->bangumiServiceRegister();
     }
 
     private function lineBotRegister()
@@ -82,6 +84,17 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ComicService::class, function () {
             $endpoint = config('services.url.comic99770');
             return new ComicService($endpoint);
+        });
+    }
+
+    private function bangumiServiceRegister()
+    {
+        $this->app->singleton(BangumiService::class, function () {
+            return new BangumiService(
+                config('services.bangumi.api_endpoint'),
+                config('services.bangumi.app_id'),
+                config('services.bangumi.secret')
+            );
         });
     }
 }
