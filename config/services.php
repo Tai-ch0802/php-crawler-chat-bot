@@ -62,4 +62,10 @@ return [
             'max_price_usd' => '0.5',
         ]
     ],
+
+    'bangumi' => [
+        'api_endpoint' => 'https://api.bgm.tv',
+        'app_id' => env('BGM_APP_ID'),
+        'secret' => env('BGM_SECRET'),
+    ],
 ];

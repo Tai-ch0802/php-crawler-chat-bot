@@ -90,9 +90,11 @@ class AppServiceProvider extends ServiceProvider
     private function bangumiServiceRegister()
     {
         $this->app->singleton(BangumiService::class, function () {
-            $id = env('BGM_APP_ID');
-            $secret = env('BGM_SECRET');
-            return new BangumiService($id, $secret);
+            return new BangumiService(
+                config('services.bangumi.api_endpoint'),
+                config('services.bangumi.app_id'),
+                config('services.bangumi.secret')
+            );
         });
     }
 }

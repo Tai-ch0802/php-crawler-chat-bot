@@ -26,4 +26,11 @@ class BangumiServiceTest extends TestCase
 
         $this->assertCount(7, $response);
     }
+
+    public function testGetSubjectEps()
+    {
+        $response = $this->target->getSubjectEps(225631);
+
+        $this->assertSame(225631, $response['id']);
+    }
 }

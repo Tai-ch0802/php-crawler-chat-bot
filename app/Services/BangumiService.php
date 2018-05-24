@@ -6,11 +6,17 @@ use GuzzleHttp\Client;
 
 class BangumiService
 {
-    private $token;
+    /**
+     * @var Client
+     */
+    private $client;
 
-    public function __construct($id, $secret)
+    private $endpoint;
+
+    public function __construct($endpoint, $id, $secret)
     {
-
+        $this->endpoint = $endpoint;
+        $this->client = new Client();
     }
 
 
@@ -22,9 +28,22 @@ class BangumiService
      */
     public function getCalendar(): array
     {
-        $client = new Client();
+        $response = $this->client->get($this->endpoint . '/calendar');
 
-        $response = $client->get('https://api.bgm.tv/calendar');
+        $data = $response->getBody()->getContents();
+
+        return json_decode($data, true);
+    }
+
+    /**
+     * 取得指定番的全集
+     *
+     * @param int $subjectId
+     * @return array
+     */
+    public function getSubjectEps(int $subjectId): array
+    {
+        $response = $this->client->get($this->endpoint . "/subject/{$subjectId}/ep");
 
         $data = $response->getBody()->getContents();
 
