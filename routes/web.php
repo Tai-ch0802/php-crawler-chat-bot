@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/bilibili_986f22bdf80494fd755c11bc450a6ec0.html', function () {
+    return File::get(public_path() . '/bilibili_986f22bdf80494fd755c11bc450a6ec0.html');
+});
