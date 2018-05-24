@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\PushAnimationNotification;
+use App\Console\Commands\PushBliAnimeNotification;
 use App\Console\Commands\PushComicNotification;
 use App\Console\Commands\PushTwitchNotification;
 use Illuminate\Console\Scheduling\Schedule;
@@ -19,6 +20,7 @@ class Kernel extends ConsoleKernel
         PushAnimationNotification::class,
         PushComicNotification::class,
         PushTwitchNotification::class,
+        PushBliAnimeNotification::class,
     ];
 
     /**
