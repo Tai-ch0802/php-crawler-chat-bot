@@ -142,15 +142,20 @@ class PushBliAnimeNotification extends Command
         }
 
         $target = null;
+        $isSerial = false;
         foreach ($eps as $ep) {
             if ($ep['airdate'] === today()->toDateString()) {
                 if ('Air' === $ep['status']) {
                     $target = $ep;
                     unset($preUpdateCache[$subjectId]);
                 }
+                $isSerial = true;
                 break;
             }
-            // 這邊為了過濾掉不是當季新番
+        }
+
+        // TODO 這邊為了過濾掉不是當季新番
+        if (!$isSerial) {
             unset($preUpdateCache[$subjectId]);
         }
 
