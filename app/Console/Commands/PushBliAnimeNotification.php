@@ -4,12 +4,8 @@ namespace App\Console\Commands;
 
 use App\Helper;
 use App\Services\BangumiService;
-use App\Services\CrawlerService;
-use App\Services\LineBotService;
 use App\Services\SlackService;
-use App\Transformers\Slack\PushAnimationTransformer;
 use App\Transformers\Slack\PushBiliAnimationTransformer;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 
