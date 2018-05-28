@@ -68,4 +68,11 @@ return [
         'app_id' => env('BGM_APP_ID'),
         'secret' => env('BGM_SECRET'),
     ],
+
+    'anime1' => [
+        'name' => 'Anime1.me 動畫線上看',
+        'endpoint' => 'https://anime1.me/',
+        'icon' => 'https://static.anime1.me/logo/260x260.png',
+        'image' => 'https://static.anime1.me/playerImg/5.jpg',
+    ],
 ];
