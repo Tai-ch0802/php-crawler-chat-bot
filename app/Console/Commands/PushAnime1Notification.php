@@ -56,7 +56,6 @@ class PushAnime1Notification extends Command
         $this->endpoint = config('services.anime1.endpoint');
         $this->icon = config('services.anime1.icon');
         $this->image = config('services.anime1.image');
-
     }
 
     /**
@@ -74,7 +73,7 @@ class PushAnime1Notification extends Command
         foreach ($list as $item) {
             if ($item['directUri'] !== $lastRecord) {
                 $targets[] = $item;
-            }else {
+            } else {
                 break;
             }
         }
